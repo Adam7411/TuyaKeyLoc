@@ -1,4 +1,4 @@
-# TuyaKeyLoc
+
 <img width="436" height="79" alt="Screenshot" src="https://github.com/user-attachments/assets/2d6b7edb-fcad-4df2-a3c4-63fd70abe5b0" />
 
 # TuyaKeyLoc (Home Assistant Add-on)
