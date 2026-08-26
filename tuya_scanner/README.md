@@ -1,6 +1,6 @@
 # TuyaKeyLoc (Home Assistant Add-on)
 
-TuyaKeyLoc discovers Tuya devices on your local network, retrieves Local Keys (Smart Life QR login or IoT Cloud), and merges everything into one diagnostic table — with IP sync helpers for tuya-local.
+TuyaKeyLoc discovers Tuya devices on your local network, retrieves Local Keys (Smart Life QR login or IoT Cloud), and merges everything into one diagnostic table — with IP sync helpers for tuya-loca[...]
 
 ---
 
@@ -42,7 +42,7 @@ TuyaKeyLoc discovers Tuya devices on your local network, retrieves Local Keys (S
 4. Add your repository URL:
 
 ```text
-https://github.com/Adam7411/TuyaKeyLoc
+https://github.com/Adam7411/tuya_scanner
 ```
 
 ### 2) Install the add-on
