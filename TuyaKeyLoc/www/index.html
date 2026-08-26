@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="pl" data-accent="blue">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TuyaKeyLoc</title>
+<link rel="icon" type="image/png" href="./icon.png">
+<link rel="apple-touch-icon" href="./icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg:     #f0f4f8;
+  --card:   #ffffff;
+  --bdr:    #dde3ec;
+  --bdr2:   #c8d2e0;
+  --blue:   #2563eb;
+  --blue2:  #1d4ed8;
+  --green:  #059669;
+  --green2: #d1fae5;
+  --orange: #d97706;
+  --orange2:#fef3c7;
+  --red:    #dc2626;
+  --red2:   #fee2e2;
+  --purple: #7c3aed;
+  --purple2:#ede9fe;
+  --gray:   #64748b;
+  --gray2:  #94a3b8;
+  --txt:    #0f172a;
+  --txt2:   #374151;
+  --mono:   'JetBrains Mono', monospace;
+  --fs:     17px;
+  --pad:    14px;
+  --accent: #2563eb;
+  --accent2:#1d4ed8;
+  --banner1:#e0f2fe;
+  --banner2:#dbeafe;
+  --banner-bdr:#93c5fd;
+}
+
+[data-accent="blue"]{--accent:#2563eb;--accent2:#1d4ed8;--blue:#2563eb;--blue2:#1d4ed8;--banner1:#e0f2fe;--banner2:#dbeafe;--banner-bdr:#93c5fd}
+[data-accent="teal"]{--accent:#0d9488;--accent2:#0f766e;--blue:#0d9488;--blue2:#0f766e;--banner1:#ccfbf1;--banner2:#99f6e4;--banner-bdr:#5eead4}
+[data-accent="emerald"]{--accent:#059669;--accent2:#047857;--blue:#059669;--blue2:#047857;--banner1:#d1fae5;--banner2:#a7f3d0;--banner-bdr:#6ee7b7}
+[data-accent="amber"]{--accent:#d97706;--accent2:#b45309;--blue:#d97706;--blue2:#b45309;--banner1:#fef3c7;--banner2:#fde68a;--banner-bdr:#fcd34d}
+[data-accent="rose"]{--accent:#e11d48;--accent2:#be123c;--blue:#e11d48;--blue2:#be123c;--banner1:#ffe4e6;--banner2:#fecdd3;--banner-bdr:#fda4af}
+[data-accent="violet"]{--accent:#7c3aed;--accent2:#6d28d9;--blue:#7c3aed;--blue2:#6d28d9;--banner1:#ede9fe;--banner2:#ddd6fe;--banner-bdr:#c4b5fd}
+[data-accent="slate"]{--accent:#475569;--accent2:#334155;--blue:#475569;--blue2:#334155;--banner1:#e2e8f0;--banner2:#cbd5e1;--banner-bdr:#94a3b8}
+
+[data-theme="dark"] {
+  --bg:     #0f172a;
+  --card:   #1e293b;
+  --bdr:   #334155;
+  --bdr2:  #475569;
+  --gray:   #94a3b8;
+  --gray2:  #64748b;
+  --txt:    #f1f5f9;
+  --txt2:   #cbd5e1;
+  --green2: #064e3b;
+  --orange2:#451a03;
+  --purple2:#2e1065;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;font-size:var(--fs);line-height:1.6}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.top-left{display:flex;align-items:center;gap:10px}
+.lang-select,.theme-toggle{padding:7px 12px;border-radius:8px;font-size:.9rem;font-weight:600;border:1.5px solid var(--bdr2);background:var(--bg);color:var(--txt);cursor:pointer}
+.credits{font-size:.85rem;color:var(--gray)}
+.credits a{color:var(--blue);text-decoration:none}
+
+.wrap{max-width:none;width:100%;margin:0;padding:16px 18px 40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 14px rgba(13,148,136,.35);background:linear-gradient(135deg,#0d9488,#22d3ee)}
+.logo img{width:100%;height:100%;object-fit:cover;display:block}
+.header-title{font-size:1.45rem;font-weight:800;color:var(--txt);letter-spacing:-.03em}
+.header-sub{font-size:.95rem;color:var(--gray);margin-top:2px}
+.header-badge{background:var(--accent);color:#fff;border-radius:6px;padding:5px 12px;font-size:.8rem;font-weight:600}
+
+.info-banner{background:linear-gradient(135deg,var(--banner1),var(--banner2));border:1px solid var(--banner-bdr);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:.95rem;line-height:1.55}
+[data-theme="dark"] .info-banner{background:linear-gradient(135deg,#1e3a5f,#172554);border-color:#1e40af}
+.info-banner strong{color:var(--accent)}
+.info-banner a{color:var(--accent);font-weight:600}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px}
+.stat-label{font-size:.8rem;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.stat-val{font-size:1.75rem;font-weight:800;color:var(--txt);line-height:1}
+.stat-val.blue{color:var(--blue)}
+.stat-val.green{color:var(--green)}
+.stat-val.orange{color:var(--orange)}
+.stat-val.purple{color:var(--purple)}
+.stat-sub{font-size:.85rem;color:var(--gray);margin-top:4px}
+.quality-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.q-badge{padding:6px 12px;border:1px solid var(--bdr2);border-radius:999px;font-size:.88rem;color:var(--txt2);background:var(--card)}
+
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.card-head{padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card-title{font-size:1.15rem;font-weight:700;color:var(--txt)}
+.card-body{padding:14px}
+.step-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:28px;
+  height:28px;
+  border-radius:999px;
+  background:var(--blue);
+  color:#fff;
+  font-weight:800;
+  font-size:.9rem;
+  margin-right:8px;
+}
+.step-help{
+  margin-top:8px;
+  font-size:.95rem;
+  color:var(--gray);
+}
+.step-help a{color:var(--blue);font-weight:600;text-decoration:none}
+.step-help a:hover{text-decoration:underline}
+
+.scan-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field-group{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--bdr2);border-radius:8px;padding:10px 14px}
+.field-group label{font-size:.88rem;font-weight:600;color:var(--gray);white-space:nowrap}
+.field-group input[type=number]{background:none;border:none;font-family:var(--mono);font-size:1.05rem;font-weight:700;color:var(--blue);width:48px;text-align:center;outline:none}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:11px 16px;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.btn-primary:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn-success:disabled{opacity:.45}
+.btn-ghost{background:var(--bg);color:var(--txt2);border:1.5px solid var(--bdr2)}
+.btn-ghost:hover{background:var(--bdr)}
+.btn-outline{background:transparent;border:1.5px solid var(--blue);color:var(--blue);padding:6px 10px;font-size:.85rem}
+.btn-outline:hover{background:var(--blue);color:#fff}
+.btn-xs{padding:5px 9px;font-size:.82rem;border-radius:6px}
+
+.scan-state{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:.85rem;
+  font-weight:700;
+  border:1px solid var(--bdr2);
+  color:var(--gray);
+  background:var(--bg);
+}
+.scan-state-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gray2);
+}
+.scan-state.running{
+  color:var(--green);
+  border-color:var(--green);
+  background:var(--green2);
+}
+.scan-state.running .scan-state-dot{
+  background:var(--green);
+  box-shadow:0 0 0 0 rgba(5,150,105,.55);
+  animation:pulse 1.2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(5,150,105,.55)}
+  100%{box-shadow:0 0 0 10px rgba(5,150,105,0)}
+}
+
+.progress-wrap{margin-top:16px;display:none}
+.progress-wrap.show{display:block}
+.progress-meta{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;color:var(--gray);margin-bottom:10px}
+.progress-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;transition:width .5s}
+.logbox{background:#0f172a;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:1rem;line-height:1.8;max-height:240px;overflow-y:auto;color:#94a3b8}
+.logbox .li-found{color:#34d399}
+.logbox .li-info{color:#60a5fa}
+.logbox .li-warn{color:#fb923c}
+
+.filter-bar{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.filter-chip{background:var(--bg);border:1.5px solid var(--bdr2);border-radius:7px;padding:6px 12px;font-size:.88rem;font-weight:600;cursor:pointer;color:var(--gray);transition:all .14s}
+.filter-chip.act{background:var(--blue);color:#fff;border-color:var(--blue)}
+.search-input{
+  min-width:220px;
+  flex:1;
+  padding:8px 12px;
+  border:1.5px solid var(--bdr2);
+  border-radius:7px;
+  background:var(--bg);
+  color:var(--txt);
+  font-size:.95rem;
+}
+
+.tbl-wrap{
+  overflow-x:auto;
+  border-top:1px solid var(--bdr);
+  -webkit-overflow-scrolling:touch;
+}
+.tbl-hint{font-size:.88rem;color:var(--gray);padding:6px 14px 0;font-weight:600}
+table{
+  width:100%;
+  min-width:1600px;
+  border-collapse:collapse;
+  table-layout:auto;
+}
+th,td{
+  padding:10px 10px;
+  text-align:left;
+  border-bottom:1px solid var(--bdr);
+  vertical-align:middle;
+  font-size:.95rem;
+  white-space:nowrap;
+}
+th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:var(--bg);
+  font-size:.8rem;
+  font-weight:700;
+  color:var(--gray);
+  text-transform:uppercase;
+}
+tbody tr:hover td{background:var(--bg)}
+th.col-actions,td.col-actions{
+  position:sticky;
+  right:0;
+  z-index:2;
+  background:var(--card);
+  box-shadow:-6px 0 10px rgba(15,23,42,.06);
+  min-width:150px;
+  white-space:nowrap;
+}
+th.col-actions{z-index:3;background:var(--bg)}
+.actions-row{display:inline-flex;gap:4px;align-items:center;flex-wrap:nowrap}
+.copy-btn{
+  margin-left:4px;
+  border:1px solid var(--bdr2);
+  border-radius:5px;
+  background:transparent;
+  color:var(--gray);
+  cursor:pointer;
+  font-size:.85rem;
+  padding:2px 6px;
+}
+.copy-btn:hover{color:var(--blue);border-color:var(--blue)}
+.dps-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1001}
+.dps-modal.show{display:flex}
+.dps-card{width:min(900px,95vw);max-height:85vh;overflow:auto;background:var(--card);border:1px solid var(--bdr2);border-radius:14px;padding:16px}
+.dps-named{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px}
+.dps-chip{background:var(--bg);border:1px solid var(--bdr2);border-radius:8px;padding:8px 10px;font-size:.85rem}
+.dps-chip b{display:block;color:var(--gray);font-weight:600;margin-bottom:2px}
+.probe-ok{color:var(--green);font-weight:700}
+.probe-bad{color:#dc2626;font-weight:700}
+.dps-pre{margin-top:10px;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px;font-family:var(--mono);font-size:.8rem;white-space:pre-wrap;word-break:break-word}
+
+.ip-cell{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--blue)}
+.dev-name-cell{font-weight:600;color:var(--txt);white-space:nowrap;font-size:1rem}
+.cell-inline{display:inline-flex;align-items:center;gap:4px}
+.cell-val{display:inline-flex;align-items:center;gap:4px;max-width:none}
+.mono-val{font-family:var(--mono);font-size:.9rem;color:var(--txt);white-space:nowrap}
+.online-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 2px var(--green2);flex-shrink:0}
+.ver-badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:.85rem;font-weight:700;font-family:var(--mono)}
+.v33{background:var(--orange2);color:var(--orange)}
+.v34{background:var(--purple2);color:var(--purple)}
+.dev-id{font-family:var(--mono);font-size:.9rem;color:var(--txt);white-space:nowrap}
+.key-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:5px;font-size:.9rem;font-weight:600;font-family:var(--mono);white-space:nowrap}
+.key-yes{background:var(--green2);color:var(--green)}
+.key-no{background:#f1f5f9;color:var(--gray2)}
+.key-blur{filter:blur(5px);user-select:none;letter-spacing:.05em}
+.key-reveal-btn{border:1px solid var(--bdr2);border-radius:5px;background:var(--bg);color:var(--gray);cursor:pointer;font-size:.8rem;padding:2px 6px}
+.key-reveal-btn:hover{color:var(--blue);border-color:var(--blue)}
+.disc-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.72rem;font-weight:700;text-transform:uppercase}
+.disc-broadcast{background:#e0f2fe;color:#0369a1}
+.disc-probe{background:#fef3c7;color:#b45309}
+.disc-scan{background:#d1fae5;color:#047857}
+.status-pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.82rem;font-weight:700;background:var(--bg);border:1px solid var(--bdr2)}
+.ha-mismatch-row{display:grid;grid-template-columns:1.2fr .9fr .9fr auto;gap:8px;align-items:center;padding:10px 12px;background:var(--bg);border:1px solid var(--bdr2);border-radius:8px;margin-bottom:8px}
+.ha-mismatch-row .mm-title{font-weight:700}
+.ha-mismatch-row .mm-old{color:#dc2626;font-family:var(--mono);font-size:.85rem}
+.ha-mismatch-row .mm-new{color:var(--green);font-family:var(--mono);font-size:.85rem}
+.ha-empty{color:var(--gray);font-size:.9rem;padding:8px 0}
+
+.empty{padding:40px 16px;text-align:center;color:var(--gray2)}
+.empty-icon{font-size:2.5rem;margin-bottom:10px;opacity:.4}
+
+.wizard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+.form-field{display:flex;flex-direction:column;gap:4px}
+.form-label{font-size:.9rem;font-weight:600;color:var(--txt)}
+.form-input{padding:11px 14px;border:1.5px solid var(--bdr2);border-radius:8px;font-size:.95rem;background:var(--bg);color:var(--txt)}
+.form-input:focus{outline:none;border-color:var(--blue)}
+.form-hint{font-size:.85rem;color:var(--gray)}
+
+.info-box{background:var(--bg);border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:.95rem;line-height:1.55;border:1px solid var(--bdr2)}
+.info-box.warn-box{border-color:#f59e0b;background:rgba(245,158,11,.08);display:none}
+.info-box.warn-box.show{display:block}
+.info-box.warn-box strong{color:#b45309}
+[data-theme="dark"] .info-box.warn-box strong{color:#fbbf24}
+.iotcore-modal .iotcore-intro{margin-top:8px;color:var(--gray);font-size:.9rem;line-height:1.5}
+.iotcore-modal .iotcore-steps{margin:12px 0 0 18px;line-height:1.7;font-size:.88rem}
+.iotcore-modal .iotcore-note{margin-top:14px;padding:10px 12px;border-radius:8px;background:rgba(245,158,11,.1);border:1px solid #f59e0b;font-size:.85rem;font-weight:600;color:#b45309}
+[data-theme="dark"] .iotcore-modal .iotcore-note{color:#fbbf24}
+.help-shot-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:var(--blue);font-weight:700;text-decoration:none;cursor:pointer;border:none;background:none;padding:0;font-size:.95rem;font-family:inherit}
+.help-shot-link:hover{text-decoration:underline}
+.backup-bar{padding:0 14px 12px 14px;display:flex;flex-direction:column;gap:8px}
+.backup-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.backup-meta{font-size:.9rem;color:var(--gray);font-weight:600}
+
+.wizard-devices{display:none!important}
+
+.qr-box{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;margin-top:10px}
+.qr-img{width:220px;height:220px;border-radius:12px;border:1px solid var(--bdr2);background:#fff;object-fit:contain;padding:8px}
+.qr-meta{flex:1;min-width:220px}
+.qr-status{font-weight:700;margin:8px 0;color:var(--txt)}
+.qr-status.ok{color:var(--green)}
+.qr-status.wait{color:var(--orange)}
+.col-check{width:36px;text-align:center}
+.col-check input{width:16px;height:16px;cursor:pointer}
+.push-card{max-width:720px;width:min(720px,94vw)}
+.push-summary{margin-top:10px;font-weight:700;font-size:.95rem}
+.push-list{margin-top:10px;max-height:280px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.push-row{padding:10px 12px;border:1px solid var(--bdr2);border-radius:8px;background:var(--bg);font-size:.88rem}
+.push-row .pr-title{font-weight:700;margin-bottom:4px}
+.push-row .pr-meta{font-family:var(--mono);font-size:.8rem;color:var(--gray);word-break:break-all}
+.push-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700;margin-left:6px}
+.push-badge.in-ha{background:rgba(34,197,94,.15);color:var(--green)}
+.push-badge.new{background:rgba(59,130,246,.15);color:var(--blue)}
+.push-badge.mm{background:rgba(245,158,11,.15);color:var(--orange)}
+.divider-or{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--gray);font-size:.85rem;font-weight:700}
+.divider-or::before,.divider-or::after{content:"";flex:1;height:1px;background:var(--bdr2)}
+.help-modal-img{width:100%;border-radius:10px;border:1px solid var(--bdr2);margin-top:10px;background:#fff}
+.help-schematic{
+  width:100%;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid var(--bdr2);
+  background:#fff;
+  overflow:hidden;
+}
+.help-schematic svg{width:100%;height:auto;display:block}
+.help-img-fallback{
+  display:none;
+  margin-top:10px;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px dashed var(--bdr2);
+  background:var(--bg);
+  color:var(--gray);
+  font-size:.9rem;
+  line-height:1.5;
+}
+.help-modal ol{margin:10px 0 0 18px;line-height:1.6;font-size:.85rem}
+.help-modal a{color:var(--blue);font-weight:600}
+.help-gallery{display:grid;gap:12px;margin-top:12px}
+.help-cap{font-size:.8rem;color:var(--gray);font-weight:600;margin-bottom:4px}
+.tip[title]{cursor:help}
+.color-dots{display:inline-flex;gap:6px;align-items:center}
+.color-dot{
+  width:18px;height:18px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;
+}
+.color-dot.act{border-color:var(--txt);box-shadow:0 0 0 2px var(--card)}
+.color-label{font-size:.85rem;color:var(--gray);font-weight:600;margin-right:4px}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;border-radius:10px;padding:14px 22px;font-size:1.05rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .25s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media (max-width:900px) {
+  .stats{grid-template-columns:1fr 1fr}
+  .wrap{padding:10px 8px 28px}
+  .card-head,.card-body{padding:10px}
+  table{min-width:1400px}
+}
+@media (max-width:600px) {
+  .top-bar{flex-direction:column;gap:8px}
+  .stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-left">
+    <select class="lang-select" id="langSelect" onchange="changeLang()" title="Language / Język">
+      <option value="pl">🇵🇱 Polski</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="fr">🇫🇷 Français</option>
+    </select>
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Dark / Light">🌙</button>
+    <div class="color-dots" id="colorDots" title="UI color">
+      <span class="color-label" id="colorLabel">Kolor</span>
+      <button type="button" class="color-dot act" data-accent="blue" style="background:#2563eb" onclick="setAccent('blue')" title="Blue"></button>
+      <button type="button" class="color-dot" data-accent="teal" style="background:#0d9488" onclick="setAccent('teal')" title="Teal"></button>
+      <button type="button" class="color-dot" data-accent="emerald" style="background:#059669" onclick="setAccent('emerald')" title="Emerald"></button>
+      <button type="button" class="color-dot" data-accent="amber" style="background:#d97706" onclick="setAccent('amber')" title="Amber"></button>
+      <button type="button" class="color-dot" data-accent="rose" style="background:#e11d48" onclick="setAccent('rose')" title="Rose"></button>
+      <button type="button" class="color-dot" data-accent="violet" style="background:#7c3aed" onclick="setAccent('violet')" title="Violet"></button>
+      <button type="button" class="color-dot" data-accent="slate" style="background:#475569" onclick="setAccent('slate')" title="Slate"></button>
+    </div>
+  </div>
+  <div class="credits" id="credits"></div>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">
+        <img src="./icon.png" alt="TuyaKeyLoc" width="52" height="52"
+          onerror="this.onerror=null;this.src='icon.png'">
+      </div>
+      <div>
+        <div class="header-title">TuyaKeyLoc</div>
+        <div class="header-sub" id="headerSub">Skaner urządzeń Tuya w sieci lokalnej</div>
+      </div>
+    </div>
+    <div class="header-badge">HA ADDON</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label" id="statTotal">Znalezione urządzenia</div>
+      <div class="stat-val blue" id="s-total">–</div>
+      <div class="stat-sub" id="statSub1">w sieci lokalnej</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label" id="statV33">Protokół v3.3</div>
+      <div class="stat-val orange" id="s-v33">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label" id="statV34">Protokół v3.4</div>
+      <div class="stat-val purple" id="s-v34">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label" id="statKey">Z kluczem lokalnym</div>
+      <div class="stat-val green" id="s-keys">–</div>
+      <div class="stat-sub" id="s-time">nie skanowano</div>
+    </div>
+  </div>
+  <div class="quality-row">
+    <div class="q-badge" id="q-online">Online: –</div>
+    <div class="q-badge" id="q-key">Z Local Key: –</div>
+    <div class="q-badge" id="q-mac">Z MAC: –</div>
+    <div class="q-badge" id="q-product">Z Product ID: –</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title"><span class="step-pill">1</span><span id="scanTitle">Skanowanie sieci</span></div>
+      <span style="font-size:.9rem;color:var(--gray)">Porty 6666 · 6667 · 7000 · <span id="ivLbl">co 1h</span></span>
+    </div>
+    <div class="card-body">
+      <div class="scan-row">
+        <div class="scan-state" id="scanState">
+          <span class="scan-state-dot"></span>
+          <span id="scanStateText">Bezczynny</span>
+        </div>
+        <div class="field-group">
+          <label id="lblDur">CZAS SKANOWANIA</label>
+          <input type="number" id="dur" value="18" min="5" max="60">
+          <label id="lblSec">sekund</label>
+        </div>
+        <div class="field-group">
+          <label>FORCE CIDR</label>
+          <input type="text" id="forceCidrs" placeholder="np. 192.168.100.0/24" style="min-width:220px;background:none;border:none;outline:none;color:var(--txt)">
+        </div>
+        <button class="btn btn-primary" id="btn-scan" onclick="doScan()">
+          <span>📡</span> <span id="btnScan">Skanuj sieć</span>
+        </button>
+        <button class="btn btn-ghost" onclick="exportJSON()">
+          <span>⬇</span> <span id="btnExport">Eksportuj JSON</span>
+        </button>
+      </div>
+      <div class="progress-wrap" id="prog-wrap">
+        <div class="progress-meta">
+          <span id="prog-status">Inicjalizacja…</span>
+          <span id="prog-pct">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+        <div class="logbox" id="logbox"></div>
+      </div>
+      <div class="step-help" id="step1Help">Krok 1 skanuje lokalną sieć i wykrywa adresy IP + Device ID + wersję protokołu.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title"><span class="step-pill">2</span><span id="wizTitle">Pobieranie kluczy z chmury</span></div>
+    </div>
+    <div class="card-body">
+      <div class="info-box" id="qrInfoBox">
+        <strong id="qrTitle">Metoda A — login QR (Smart Life)</strong><br>
+        <span id="qrHelp">Bez iot.tuya.com / IoT Core. Weź User Code z aplikacji: Me → ⚙️ → Account and Security → User Code. Potem skanuj QR w aplikacji (+ → Scan) i potwierdź login.</span>
+        <div class="wizard-grid" style="margin-top:12px">
+          <div class="form-field">
+            <label class="form-label" id="lblQrUser">User Code</label>
+            <input class="form-input" type="text" id="qr-user" placeholder="np. ABCDEF" autocomplete="off">
+          </div>
+          <div class="form-field">
+            <label class="form-label" id="lblQrScheme">Aplikacja QR</label>
+            <select class="form-input" id="qr-scheme">
+              <option value="smartlife">Smart Life</option>
+              <option value="tuyaSmart">Tuya Smart</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+          <button class="btn btn-success" type="button" id="btnQrStart" onclick="startQrLogin()">📱 <span id="lblQrStart">Pokaż QR i zaloguj</span></button>
+          <button class="btn btn-ghost" type="button" id="btnQrFetch" onclick="fetchQrDevices(false)" disabled>🔑 <span id="lblQrFetch">Pobierz klucze (QR)</span></button>
+          <button class="btn btn-ghost" type="button" id="btnQrRefresh" onclick="fetchQrDevices(true)" disabled>↻ <span id="lblQrRefresh">Odśwież z chmury</span></button>
+          <button class="btn btn-ghost" type="button" id="btnQrLogout" onclick="logoutQr()" disabled>↩ <span id="lblQrLogout">Wyloguj QR</span></button>
+        </div>
+        <div class="step-help" id="qrCacheMeta" style="margin-top:8px;display:none"></div>
+        <div class="qr-box" id="qrBox" style="display:none">
+          <img class="qr-img" id="qrImg" alt="QR login">
+          <div class="qr-meta">
+            <div class="qr-status wait" id="qrStatus">Czekam na skan w aplikacji…</div>
+            <div class="step-help" id="qrScanHint" style="margin:0">Smart Life → + → Scan → Confirm login (może pokazać „Home Assistant” — to OK).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider-or" id="qrOrLabel">albo klasycznie (IoT Core)</div>
+
+      <div class="info-box" id="wizInfo">
+        <strong id="howToTitle">Metoda B — Access ID / Secret (iot.tuya.com)</strong><br>
+        <span id="howToText">1. Zaloguj się na iot.tuya.com → 2. Utwórz/otwórz projekt Cloud → 3. Overview: Access ID + Secret → 4. Devices → Link Tuya App Account → 5. Włącz API IoT Core (odnów jeśli wygasło). Najpierw zrób skan sieci — Device ID weźmie się automatycznie.</span>
+        <br>
+        <button type="button" class="help-shot-link" id="wizHelpLink" onclick="openHelpShot()">📷 Kliknij tutaj, aby zobaczyć zrzut ekranu konfiguracji</button>
+      </div>
+      <div class="info-box warn-box" id="iotCoreBox" role="alert">
+        <strong id="iotCoreTitle">Wykryto: IoT Core subscription has expired (28841002)</strong><br>
+        <span id="iotCoreText">To nie błąd addonu — Tuya zablokowała API. Odnów darmowy trial (szczegóły w okienku pomocy).</span>
+        <br>
+        <button type="button" class="help-shot-link" id="iotCoreOpenBtn" onclick="openIotCoreHelp()">📋 Pokaż instrukcję odnowienia trialu</button>
+      </div>
+
+      <div class="wizard-grid">
+        <div class="form-field">
+          <label class="form-label" id="lblRegion">Region API</label>
+          <select class="form-input" id="w-region">
+            <option value="eu">Europa Centralna (eu)</option>
+            <option value="eu-w">Europa Zachodnia (eu-w)</option>
+            <option value="us">USA Zachód (us)</option>
+            <option value="us-e">USA Wschód (us-e)</option>
+            <option value="sg">Singapur (sg)</option>
+            <option value="in">Indie (in)</option>
+            <option value="cn">Chiny (cn)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" id="lblKey">Client ID (API Key)</label>
+          <input class="form-input" type="text" id="w-key" placeholder="np. 9a8b7c6d5e4f3a2b1c0d…">
+        </div>
+        <div class="form-field">
+          <label class="form-label" id="lblSecret">Client Secret</label>
+          <input class="form-input" type="password" id="w-secret" placeholder="••••••••••••••••">
+        </div>
+        <div class="form-field">
+          <label class="form-label" id="lblDevice">Device ID (opcjonalnie)</label>
+          <input class="form-input" type="text" id="w-device" placeholder="Zostaw puste = ID z lokalnego skanu">
+        </div>
+      </div>
+
+      <button class="btn btn-success" id="btn-wizard" onclick="doWizard()">
+        <span>🔑</span> <span id="btnWizRun">Uruchom i pobierz klucze</span>
+      </button>
+
+      <div class="progress-wrap" id="w-prog-wrap" style="margin-top:16px">
+        <div class="progress-meta">
+          <span id="w-status">Łączenie z Tuya Cloud…</span>
+        </div>
+        <div class="logbox" id="w-logbox"></div>
+      </div>
+      <div class="step-help" id="step2Help">Krok 2 pobiera Local Key i nazwy urządzeń z Tuya Cloud (wizard).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title"><span class="step-pill">3</span><span id="haSyncTitle">Sync z tuya-local (IP)</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ghost" id="btnHaRefresh" onclick="refreshHa()">⌂ <span id="lblHaRefresh">Odśwież HA</span></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="step-help" id="haSyncHelp">Porównuje IP ze skanu LAN z hostami tuya_local. QR podaje tylko publiczne IP chmury — ich nie używamy. Najpierw skan sieci, potem Napraw IP.</div>
+      <div class="backup-meta" id="haSyncMeta">Brak danych HA — kliknij Odśwież HA</div>
+      <div id="haMismatchList" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title"><span class="step-pill">4</span><span id="tblTitle">Wyniki (tabela scalona)</span></div>
+      <div class="filter-bar">
+        <button class="filter-chip act" id="fltAll" onclick="setFilter('all')">Wszystkie</button>
+        <button class="filter-chip" id="f33" onclick="setFilter('3.3')">v3.3</button>
+        <button class="filter-chip" id="f34" onclick="setFilter('3.4')">v3.4</button>
+        <button class="filter-chip" id="fkey" onclick="setFilter('key')">🔑 <span id="fltKey">Z kluczem</span></button>
+        <button class="filter-chip" id="fonline" onclick="setFilter('online')">Online</button>
+        <button class="filter-chip" id="foffline" onclick="setFilter('offline')">Offline</button>
+        <button class="filter-chip" id="fcloud" onclick="setFilter('cloud')">Only-cloud</button>
+        <button class="filter-chip" id="btnToggleKeys" onclick="toggleKeysVisible()">👁 <span id="lblToggleKeys">Pokaż klucze</span></button>
+        <input class="search-input" id="searchInput" placeholder="Szukaj: nazwa, IP, ID, Product, Local Key, MAC" oninput="renderDevices()">
+      </div>
+    </div>
+    <div class="step-help" id="step3Help" style="padding:0 24px 14px 24px">Krok 4 scala dane ze skanu i chmury. Local Key jest domyślnie ukryty — użyj „Pokaż klucze”.</div>
+    <div class="backup-bar" id="backupBar">
+      <div class="backup-meta" id="backupMeta">Brak zapisanego backupu</div>
+      <div class="backup-actions">
+        <button class="btn btn-success" id="btnSaveBackup" onclick="saveBackup()">💾 <span id="lblSaveBackup">Zapisz backup</span></button>
+        <button class="btn btn-ghost" id="btnDownloadBackup" onclick="downloadBackup()">⬇ <span id="lblDownloadBackup">Pobierz na PC</span></button>
+        <button class="btn btn-ghost" id="btnExportLocaltuya" onclick="exportIntegration('localtuya')">📦 <span id="lblExportLocaltuya">LocalTuya YAML</span></button>
+        <button class="btn btn-ghost" id="btnExportTuyaLocal" onclick="exportIntegration('tuya_local')">📦 <span id="lblExportTuyaLocal">tuya-local YAML</span></button>
+        <button class="btn btn-success" id="btnPushTuyaLocal" onclick="openTuyaLocalPush()">➡ <span id="lblPushTuyaLocal">Push tuya-local</span></button>
+        <select class="form-input" id="backupSelect" style="min-width:220px;padding:10px 12px"></select>
+        <button class="btn btn-ghost" id="btnRestoreBackup" onclick="restoreBackup()">↩ <span id="lblRestoreBackup">Przywróć</span></button>
+      </div>
+      <div class="step-help" id="backupHelp" style="margin:0">Po pobraniu kluczy dane zapisują się automatycznie w /data/exports (przetrwa restart addonu).</div>
+    </div>
+    <div class="tbl-hint" id="tblHint">Pełne wartości bez skrótów — przewiń w poziomie przy wąskim ekranie. Przy każdym polu jest przycisk ⧉ (kopiuj).</div>
+    <div id="tbl-container">
+      <div class="empty" id="empty-state">
+        <div class="empty-icon">📡</div>
+        <p id="emptyMsg"><strong>Skanuj sieć</strong> aby wykryć urządzenia</p>
+      </div>
+      <div class="tbl-wrap" id="tbl-wrap" style="display:none">
+        <table>
+          <thead><tr>
+            <th class="col-check"><input type="checkbox" id="chkAllDevices" title="Zaznacz wszystkie" onchange="toggleSelectAll(this.checked)"></th>
+            <th id="thName">Nazwa</th>
+            <th>IP</th>
+            <th>MAC</th>
+            <th id="thVer">Ver</th>
+            <th>Device ID</th>
+            <th>Product</th>
+            <th id="thKey">Local Key</th>
+            <th id="thDisc">Źródło</th>
+            <th>Status</th>
+            <th class="col-actions" id="thActions">Akcje</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="dps-modal" id="dpsModal">
+  <div class="dps-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <strong id="dpsTitle">DPS Diagnostics</strong>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="padding:6px 10px" id="dpsProbeBtn" onclick="probeFromModal()">Probe</button>
+        <button class="btn btn-ghost" style="padding:6px 10px" id="dpsMonBtn" onclick="monitorFromModal()">Monitor</button>
+        <button class="btn btn-ghost" style="padding:6px 10px" id="dpsCloseBtn" onclick="closeDps()">Close</button>
+      </div>
+    </div>
+    <div id="dpsMeta" style="margin-top:8px;color:var(--gray)"></div>
+    <div id="dpsNamed" style="margin-top:10px;display:none"></div>
+    <pre class="dps-pre" id="dpsPre">No data</pre>
+  </div>
+</div>
+<div class="dps-modal" id="pushModal" onclick="if(event.target===this)closeTuyaLocalPush()">
+  <div class="dps-card push-card" role="dialog" aria-modal="true">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <strong id="pushModalTitle">Push do tuya-local</strong>
+      <button class="btn btn-ghost" style="padding:6px 10px" onclick="closeTuyaLocalPush()" id="pushCloseBtn">Zamknij</button>
+    </div>
+    <p class="iotcore-intro" id="pushModalIntro">Zaznaczone urządzenia → YAML pod tuya-local + status w HA.</p>
+    <div class="push-summary" id="pushSummary"></div>
+    <div class="push-list" id="pushList"></div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-success" type="button" onclick="copyPushYaml()">⧉ <span id="lblCopyPushYaml">Kopiuj YAML</span></button>
+      <button class="btn btn-ghost" type="button" onclick="downloadPushYaml()">⬇ <span id="lblDownloadPushYaml">Pobierz YAML</span></button>
+    </div>
+    <pre class="dps-pre" id="pushYamlPre" style="margin-top:10px;max-height:220px"></pre>
+  </div>
+</div>
+<div class="dps-modal iotcore-modal" id="iotCoreModal" onclick="if(event.target===this)closeIotCoreHelp()">
+  <div class="dps-card" role="dialog" aria-modal="true" aria-labelledby="iotCoreModalTitle">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <strong id="iotCoreModalTitle">IoT Core wygasło (28841002)</strong>
+      <button class="btn btn-ghost" style="padding:6px 10px" onclick="closeIotCoreHelp()" id="iotCoreCloseBtn">Zamknij</button>
+    </div>
+    <p class="iotcore-intro" id="iotCoreModalIntro">To nie błąd addonu — Tuya zablokowała API. Odnów darmowy trial IoT Core, potem ponów „Pobierz klucze”.</p>
+    <ol class="iotcore-steps" id="iotCoreModalSteps"></ol>
+    <div class="iotcore-note" id="iotCoreModalNote">Nie kupuj drogiego planu Enterprise — użyj darmowego Extend trial.</div>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-outline" href="https://iot.tuya.com/" target="_blank" rel="noopener">iot.tuya.com</a>
+      <button class="btn btn-success" type="button" onclick="closeIotCoreHelp()" id="iotCoreOkBtn">OK, rozumiem</button>
+    </div>
+  </div>
+</div>
+<div class="dps-modal help-modal" id="helpModal">
+  <div class="dps-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <strong id="helpModalTitle">Tuya API — screenshot</strong>
+      <button class="btn btn-ghost" style="padding:6px 10px" onclick="closeHelpShot()" id="helpCloseBtn">Close</button>
+    </div>
+    <p id="helpModalText" style="margin-top:8px;color:var(--gray);font-size:.85rem"></p>
+    <ol id="helpModalSteps"></ol>
+    <div class="help-gallery">
+      <div>
+        <div class="help-cap" id="helpCapSchematic">Project Management — otwórz projekt</div>
+        <img class="help-modal-img" id="helpImgSchematic" alt="Tuya Project Management"
+          loading="lazy" src=""
+          data-local="ProjectManagement.png"
+          onerror="helpImgFailed(this,'helpSchematicFallback')">
+        <div class="help-img-fallback" id="helpSchematicFallback">Brak pliku ProjectManagement.png w www/. Wejdź na iot.tuya.com → Cloud → Project Management → Open Project.</div>
+      </div>
+      <div>
+        <div class="help-cap" id="helpCapKeys">Access ID / Secret — co skopiować</div>
+        <img class="help-modal-img" id="helpImgKeys" alt="Tuya Access ID and Secret"
+          loading="lazy" src=""
+          data-local="AccessIDSecret.png"
+          onerror="helpImgFailed(this,'helpKeysFallback')">
+        <div class="help-img-fallback" id="helpKeysFallback">Brak pliku AccessIDSecret.png w www/. W Overview projektu skopiuj Access ID/Client ID oraz Access Secret/Client Secret.</div>
+      </div>
+      <div>
+        <div class="help-cap" id="helpCapLink">Link Tuya App Account</div>
+        <img class="help-modal-img" id="helpImgLink" alt="Link Tuya App Account"
+          referrerpolicy="no-referrer" loading="lazy"
+          data-src="https://user-images.githubusercontent.com/836718/155827671-44d5fce4-0119-4d0e-a224-ef3715fafc24.png"
+          src=""
+          onerror="helpImgFailed(this,'helpLinkFallback')">
+        <div class="help-img-fallback" id="helpLinkFallback">Zrzut zewnętrzny niedostępny. W projekcie Tuya: Devices → Link Tuya App Account (Smart Life / Tuya).</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-outline" href="https://iot.tuya.com/" target="_blank" rel="noopener">iot.tuya.com</a>
+      <button class="btn btn-ghost" type="button" id="btnOpenHelpPage" onclick="openLocalHelpAsset()">Otwórz stronę pomocy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const tr = {
+  pl: {
+    headerSub: "Skaner urządzeń Tuya w sieci lokalnej",
+    statTotal: "Znalezione urządzenia", statSub1: "w sieci lokalnej",
+    statV33: "Protokół v3.3", statV34: "Protokół v3.4", statKey: "Z kluczem lokalnym",
+    scanTitle: "Skanowanie sieci", ivLbl: "co 1h",
+    step1Help: "Krok 1 skanuje lokalną sieć i wykrywa adresy IP + Device ID + wersję protokołu.",
+    step2Help: "Krok 2 pobiera Local Key i nazwy urządzeń z Tuya Cloud (wizard).",
+    step3Help: "Krok 4 scala dane ze skanu i chmury. Local Key jest domyślnie ukryty — użyj „Pokaż klucze”.",
+    haSyncTitle: "Sync z tuya-local (IP)",
+    haSyncHelp: "Porównuje IP ze skanu LAN z hostami tuya_local. QR podaje tylko publiczne IP chmury — ich nie używamy. Najpierw skan sieci, potem Napraw IP.",
+    lblHaRefresh: "Odśwież HA",
+    haMetaNone: "Brak danych HA — kliknij Odśwież HA",
+    haMetaOk: "tuya_local: {n} wpisów · różnice IP: {m} · sync: {at}",
+    haNoMismatch: "Brak różnic IP — wszystko zgodne ze skanem (albo najpierw zrób skan).",
+    haFixBtn: "Napraw IP",
+    haFixOk: "Zaktualizowano IP w HA",
+    haFixFail: "Fix IP nieudany: ",
+    haFixNeedLan: "Brak LAN IP — uruchom skan",
+    lblToggleKeys: "Pokaż klucze",
+    lblHideKeys: "Ukryj klucze",
+    thDisc: "Źródło",
+    discBroadcast: "broadcast",
+    discProbe: "probe",
+    discScan: "scan",
+    tipHaRefresh: "Wczytuje wpisy tuya_local z Home Assistant (host / device_id).",
+    tipHaFix: "Zapisuje nowe IP do options flow tuya_local (zatwierdzasz per urządzenie).",
+    lblDur: "CZAS SKANOWANIA", lblSec: "sekund", btnScan: "Skanuj sieć", btnScanRun: "Skanowanie…",     btnExport: "Eksportuj JSON",
+    lblSaveBackup: "Zapisz backup",
+    lblDownloadBackup: "Pobierz na PC",
+    lblRestoreBackup: "Przywróć",
+    backupNone: "Brak zapisanego backupu",
+    backupMeta: "Ostatni backup: {at} · urządzeń: {devices} · z kluczem: {keys} ({reason})",
+    backupHelp: "Po pobraniu kluczy dane zapisują się automatycznie w /data/exports (przetrwa restart addonu).",
+    toastBackupSaved: "Backup zapisany w /data/exports",
+    toastBackupRestored: "Przywrócono backup ({devices} urządzeń)",
+    toastBackupEmpty: "Brak danych do zapisu",
+    toastBackupFail: "Błąd backupu: ",
+    lblExportLocaltuya: "LocalTuya YAML",
+    lblExportTuyaLocal: "tuya-local YAML",
+    toastExportOk: "Wyeksportowano {n} urządzeń",
+    toastExportEmpty: "Brak urządzeń z Local Key",
+    probeBtn: "Probe",
+    monBtn: "Mon",
+    probeOk: "OK {ms}ms",
+    probeFail: "FAIL",
+    toastProbeOk: "Probe OK ({ms} ms)",
+    toastProbeFail: "Probe FAIL: ",
+    toastMonDone: "Monitor: {summary}",
+    dpsNamedTitle: "DPS z nazwami (mapping)",
+    scanIdle: "Bezczynny", scanRunning: "Skanowanie trwa",
+    wizTitle: "Pobieranie kluczy z chmury",
+    howToTitle: "Metoda B — Access ID / Secret (iot.tuya.com)", howToText: "1. Zaloguj się na iot.tuya.com → 2. Utwórz/otwórz projekt Cloud → 3. Overview: Access ID + Secret → 4. Devices → Link Tuya App Account → 5. Włącz API IoT Core (odnów jeśli wygasło). Najpierw zrób skan sieci — Device ID weźmie się automatycznie.",
+    qrTitle: "Metoda A — login QR (Smart Life)",
+    qrHelp: "Bez iot.tuya.com / IoT Core. Weź User Code z aplikacji: Me → ⚙️ → Account and Security → User Code. Potem skanuj QR w aplikacji (+ → Scan) i potwierdź login.",
+    lblQrUser: "User Code",
+    lblQrScheme: "Aplikacja QR",
+    lblQrStart: "Pokaż QR i zaloguj",
+    lblQrFetch: "Pobierz klucze (QR)",
+    lblQrRefresh: "Odśwież z chmury",
+    lblQrLogout: "Wyloguj QR",
+    qrOrLabel: "albo klasycznie (IoT Core)",
+    qrStatusWait: "Czekam na skan w aplikacji…",
+    qrStatusOk: "Zalogowano — pobieram klucze…",
+    qrStatusExpired: "QR wygasł — wygeneruj ponownie",
+    qrStatusFetching: "Pobieram klucze z chmury…",
+    qrScanHint: "Smart Life → + → Scan → Confirm login (może pokazać „Home Assistant” — to OK).",
+    qrNeedCode: "Wpisz User Code",
+    qrFetchOk: "Pobrano klucze QR: {n} urządzeń ({k} z Local Key)",
+    qrFetchCached: "Z cache QR ({age}): {n} urządzeń ({k} z Local Key)",
+    qrCacheMeta: "Cache QR: {n} urządzeń · wiek {age} · TTL 24h",
+    qrCacheEmpty: "Brak cache QR — pobierz klucze lub odśwież z chmury.",
+    qrLoggedIn: "Sesja QR aktywna — pobieram klucze…",
+    qrLoggedOut: "Wylogowano z QR",
+    lblPushTuyaLocal: "Push tuya-local",
+    tipPushTuyaLocal: "Zaznacz urządzenia z kluczem → YAML + status w HA (nowe / już dodane / różnica IP).",
+    pushModalTitle: "Push do tuya-local",
+    pushModalIntro: "Zaznaczone urządzenia → YAML pod tuya-local. Nowe dodaj w HA (Integracje → tuya-local). Przy różnicy IP możesz Fix.",
+    pushSummary: "Wybrane: {n} · w HA: {ha} · nowe: {new} · różnice IP: {mm}",
+    pushNeedSelect: "Zaznacz urządzenia z Local Key (albo zostaw puste = wszystkie z kluczem).",
+    pushEmpty: "Brak urządzeń z Local Key do push.",
+    pushBadgeHa: "w HA",
+    pushBadgeNew: "nowe",
+    pushBadgeMm: "IP ≠",
+    lblCopyPushYaml: "Kopiuj YAML",
+    lblDownloadPushYaml: "Pobierz YAML",
+    toastPushCopied: "YAML skopiowany",
+    iotCoreTitle: "Wykryto: IoT Core subscription has expired (28841002)",
+    iotCoreText: "To nie błąd addonu — Tuya zablokowała API. Odnów darmowy trial LUB użyj Metody A (login QR).",
+    iotCoreOpenBtn: "📋 Pokaż instrukcję odnowienia trialu",
+    iotCoreModalTitle: "IoT Core wygasło — odnów darmowy trial",
+    iotCoreModalIntro: "To nie błąd addonu — Tuya zablokowała API (kod 28841002). Możesz też pominąć IoT Core i użyć Metody A (login QR). Albo wykonaj poniższe kroki.",
+    iotCoreModalSteps: [
+      "Wejdź na iot.tuya.com i zaloguj się",
+      "Cloud → Cloud Services",
+      "IoT Core → View details → Extend trial",
+      "Formularz: Individual Developer, Less than 50 devices, max. Extension Period, opis: personal Home Assistant / local keys (non-commercial)",
+      "Wyślij, poczekaj na akceptację, potem ponów „Pobierz klucze” w tym addonie"
+    ],
+    iotCoreModalNote: "Nie kupuj drogiego planu Enterprise — użyj darmowego Extend trial albo login QR.",
+    iotCoreOkBtn: "OK, rozumiem",
+    wizHelpLink: "📷 Kliknij tutaj, aby zobaczyć zrzut ekranu konfiguracji",
+    lblRegion: "Region API", lblKey: "Client ID (API Key)", lblSecret: "Client Secret", lblDevice: "Device ID (opcjonalnie)", btnWizRun: "Uruchom i pobierz klucze",
+    tblTitle: "Wyniki (tabela scalona)", fltAll: "Wszystkie", fltKey: "Z kluczem",
+    thName: "Nazwa", thVer: "Wersja", thKey: "Local Key",
+    emptyMsg: "<strong>Skanuj sieć</strong> aby wykryć urządzenia",
+    wizDone: "✅ Pobrane urządzenia z kluczami:",
+    noKey: "⚠ Brak klucza",
+    toastScan: "Znaleziono {} urządzeń", toastKey: "Pobrano klucze dla {} urządzeń",
+    progInit: "Inicjalizacja…", progRun: "Uruchamianie…", progUDP: "Nasłuchuję UDP…", progEnd: "Zakończono ✓",
+    wStatus: "Łączenie z Tuya Cloud…",
+    credits: "",
+    copyCol: "Kopiuj",
+    copyRow: "⧉",
+    thActions: "Akcje",
+    tblHint: "Pełne wartości bez skrótów — przewiń w poziomie przy wąskim ekranie. Przy każdym polu jest przycisk ⧉ (kopiuj).",
+    helpModalTitle: "Tuya API — jak znaleźć Access ID / Secret",
+    helpModalText: "Zrzuty są wbudowane w dodatek (działają przez Ingress / HTTPS). 1) Project Management → Open Project. 2) Overview → skopiuj Access ID i Secret.",
+    helpClose: "Zamknij",
+    helpCapSchematic: "Project Management — otwórz projekt",
+    helpCapKeys: "Access ID / Secret — co skopiować",
+    helpCapLink: "Link Tuya App Account",
+    btnOpenHelpPage: "Otwórz stronę pomocy",
+    colorLabel: "Kolor",
+    copyName: "Kopiuj nazwę",
+    copyIp: "Kopiuj IP",
+    copyMac: "Kopiuj MAC",
+    copyVer: "Kopiuj wersję",
+    copyId: "Kopiuj Device ID",
+    copyPid: "Kopiuj Product ID",
+    copyKey: "Kopiuj Local Key",
+    toastCopied: "Skopiowano",
+    toastCopyFail: "Nie udało się skopiować",
+    tipProbe: "Probe: szybki test lokalny — czy IP + Local Key + wersja protokołu działają (status()). Zielony OK = klucz dobry.",
+    tipDps: "DPS: odczyt raw datapoints urządzenia (przełączniki, jasność itd.). Pokazuje też nazwy z mapowania Cloud.",
+    tipMon: "Monitor: kilka odczytów statusu co ~2 s — sprawdza stabilność połączenia lokalnego.",
+    tipCopy: "Kopiuj cały wiersz (nazwa, IP, MAC, wersja, ID, Product, Local Key) do schowka.",
+    tipScan: "Skanuje sieć lokalną (UDP/TCP) i wykrywa urządzenia Tuya: IP, Device ID, wersję protokołu.",
+    tipWizard: "Pobiera Local Key i nazwy — Metoda A (QR Smart Life) albo Metoda B (Access ID/Secret + IoT Core).",
+    tipExport: "Eksportuje listę urządzeń do pliku JSON.",
+    tipSaveBackup: "Zapisuje snapshot urządzeń+kluczy w /data/exports (przetrwa restart addonu).",
+    tipDownloadBackup: "Pobiera wybrany backup JSON na komputer.",
+    tipRestoreBackup: "Przywraca urządzenia i klucze z wybranego backupu.",
+    tipLocaltuya: "Generuje YAML pod LocalTuya (host, device_id, local_key, protocol_version).",
+    tipTuyaLocal: "Generuje YAML pod tuya-local (make-all).",
+    tipRegion: "Region centrum danych projektu Tuya (eu / eu-w / us…). Zły region = błąd Cloud.",
+    tipKey: "Access ID / Client ID z Overview projektu na iot.tuya.com",
+    tipSecret: "Access Secret / Client Secret z Overview projektu na iot.tuya.com",
+    tipDevice: "Opcjonalne Device ID — jeśli puste, addon bierze ID z lokalnego skanu.",
+    tipForceCidr: "Wymuś skan podsieci (np. 192.168.100.0/24), gdy broadcast nie działa.",
+    tipTheme: "Przełącz jasny / ciemny motyw",
+    tipColor: "Kolorystyka akcentów UI",
+    helpSteps: [
+      "Wejdź na iot.tuya.com i zaloguj się",
+      "Cloud → Development → otwórz projekt",
+      "W Overview skopiuj Access ID/Client ID oraz Access Secret",
+      "Devices → Link Tuya App Account (Smart Life / Tuya)",
+      "Upewnij się, że IoT Core jest aktywne (Extend trial jeśli wygasło)"
+    ],
+    dpsBtn: "DPS",
+    dpsTitle: "Diagnostyka DPS",
+    dpsClose: "Zamknij",
+    noData: "Brak danych",
+    qOnline: "Online",
+    qKey: "Z Local Key",
+    qMac: "Z MAC",
+    qProduct: "Z Product ID"
+  },
+  en: {
+    headerSub: "Scanner for Tuya devices on local network",
+    statTotal: "Found devices", statSub1: "on local network",
+    statV33: "Protocol v3.3", statV34: "Protocol v3.4", statKey: "With local key",
+    scanTitle: "Network scan", ivLbl: "every 1h",
+    step1Help: "Step 1 scans the local network and detects IP + Device ID + protocol version.",
+    step2Help: "Step 2 downloads Local Key and device names from Tuya Cloud (wizard).",
+    step3Help: "Step 4 merges scan + cloud data. Local Key is hidden by default — use Show keys.",
+    haSyncTitle: "Sync with tuya-local (IP)",
+    haSyncHelp: "Compares LAN scan IPs with tuya_local hosts. QR returns public cloud IPs — those are ignored. Scan LAN first, then Fix IP.",
+    lblHaRefresh: "Refresh HA",
+    haMetaNone: "No HA data — click Refresh HA",
+    haMetaOk: "tuya_local: {n} entries · IP mismatches: {m} · sync: {at}",
+    haNoMismatch: "No IP mismatches — matches scan (or run a scan first).",
+    haFixBtn: "Fix IP",
+    haFixOk: "Updated IP in HA",
+    haFixFail: "Fix IP failed: ",
+    haFixNeedLan: "No LAN IP — run a scan",
+    lblToggleKeys: "Show keys",
+    lblHideKeys: "Hide keys",
+    thDisc: "Source",
+    discBroadcast: "broadcast",
+    discProbe: "probe",
+    discScan: "scan",
+    tipHaRefresh: "Load tuya_local config entries from Home Assistant.",
+    tipHaFix: "Write the new IP via tuya_local options flow (per device).",
+    lblDur: "SCAN DURATION", lblSec: "seconds", btnScan: "Scan network", btnScanRun: "Scanning…",     btnExport: "Export JSON",
+    lblSaveBackup: "Save backup",
+    lblDownloadBackup: "Download to PC",
+    lblRestoreBackup: "Restore",
+    backupNone: "No backup saved yet",
+    backupMeta: "Last backup: {at} · devices: {devices} · with key: {keys} ({reason})",
+    backupHelp: "After fetching keys, data is auto-saved to /data/exports (survives add-on restarts).",
+    toastBackupSaved: "Backup saved to /data/exports",
+    toastBackupRestored: "Backup restored ({devices} devices)",
+    toastBackupEmpty: "Nothing to save",
+    toastBackupFail: "Backup error: ",
+    lblExportLocaltuya: "LocalTuya YAML",
+    lblExportTuyaLocal: "tuya-local YAML",
+    toastExportOk: "Exported {n} devices",
+    toastExportEmpty: "No devices with Local Key",
+    probeBtn: "Probe",
+    monBtn: "Mon",
+    probeOk: "OK {ms}ms",
+    probeFail: "FAIL",
+    toastProbeOk: "Probe OK ({ms} ms)",
+    toastProbeFail: "Probe FAIL: ",
+    toastMonDone: "Monitor: {summary}",
+    dpsNamedTitle: "Named DPS (mapping)",
+    scanIdle: "Idle", scanRunning: "Scanning in progress",
+    wizTitle: "Get keys from Cloud",
+    howToTitle: "Method B — Access ID / Secret (iot.tuya.com)", howToText: "1. Log in to iot.tuya.com → 2. Create/open a Cloud project → 3. Overview: Access ID + Secret → 4. Devices → Link Tuya App Account → 5. Enable IoT Core API (renew if expired). Run a network scan first — Device ID is auto-picked.",
+    qrTitle: "Method A — QR login (Smart Life)",
+    qrHelp: "No iot.tuya.com / IoT Core. Get User Code in the app: Me → ⚙️ → Account and Security → User Code. Then scan the QR (+ → Scan) and confirm login.",
+    lblQrUser: "User Code",
+    lblQrScheme: "QR app",
+    lblQrStart: "Show QR and log in",
+    lblQrFetch: "Fetch keys (QR)",
+    lblQrRefresh: "Refresh from cloud",
+    lblQrLogout: "Log out QR",
+    qrOrLabel: "or classic (IoT Core)",
+    qrStatusWait: "Waiting for scan in the app…",
+    qrStatusOk: "Logged in — fetching keys…",
+    qrStatusExpired: "QR expired — generate again",
+    qrStatusFetching: "Fetching keys from cloud…",
+    qrScanHint: "Smart Life → + → Scan → Confirm login (may show Home Assistant — that is OK).",
+    qrNeedCode: "Enter User Code",
+    qrFetchOk: "QR keys fetched: {n} devices ({k} with Local Key)",
+    qrFetchCached: "From QR cache ({age}): {n} devices ({k} with Local Key)",
+    qrCacheMeta: "QR cache: {n} devices · age {age} · TTL 24h",
+    qrCacheEmpty: "No QR cache — fetch keys or refresh from cloud.",
+    qrLoggedIn: "QR session active — fetching keys…",
+    qrLoggedOut: "QR logged out",
+    lblPushTuyaLocal: "Push tuya-local",
+    tipPushTuyaLocal: "Select devices with a key → YAML + HA status (new / already added / IP mismatch).",
+    pushModalTitle: "Push to tuya-local",
+    pushModalIntro: "Selected devices → tuya-local YAML. Add new ones in HA (Integrations → tuya-local). Fix IP when mismatched.",
+    pushSummary: "Selected: {n} · in HA: {ha} · new: {new} · IP mismatches: {mm}",
+    pushEmpty: "No devices with Local Key to push.",
+    pushBadgeHa: "in HA",
+    pushBadgeNew: "new",
+    pushBadgeMm: "IP ≠",
+    lblCopyPushYaml: "Copy YAML",
+    lblDownloadPushYaml: "Download YAML",
+    toastPushCopied: "YAML copied",
+    iotCoreTitle: "Detected: IoT Core subscription has expired (28841002)",
+    iotCoreText: "This is not an add-on bug — Tuya blocked the API. Renew the free trial OR use Method A (QR login).",
+    iotCoreOpenBtn: "📋 Show trial renewal instructions",
+    iotCoreModalTitle: "IoT Core expired — renew free trial",
+    iotCoreModalIntro: "This is not an add-on bug — Tuya blocked the API (code 28841002). You can skip IoT Core and use Method A (QR login), or follow the steps below.",
+    iotCoreModalSteps: [
+      "Open iot.tuya.com and sign in",
+      "Cloud → Cloud Services",
+      "IoT Core → View details → Extend trial",
+      "Form: Individual Developer, Less than 50 devices, longest Extension Period, overview: personal Home Assistant / local keys (non-commercial)",
+      "Submit, wait for approval, then re-run Get keys in this add-on"
+    ],
+    iotCoreModalNote: "Do not buy the expensive Enterprise plan — use free Extend trial or QR login.",
+    iotCoreOkBtn: "OK, got it",
+    wizHelpLink: "📷 Click here to view setup screenshot",
+    lblRegion: "API Region", lblKey: "Client ID", lblSecret: "Client Secret", lblDevice: "Device ID (optional)", btnWizRun: "Run and get keys",
+    tblTitle: "Results (merged table)", fltAll: "All", fltKey: "With key",
+    thName: "Name", thVer: "Version", thKey: "Local Key",
+    emptyMsg: "<strong>Scan network</strong> to detect devices",
+    wizDone: "✅ Downloaded devices with keys:",
+    noKey: "⚠ No key",
+    toastScan: "Found {} devices", toastKey: "Downloaded keys for {} devices",
+    progInit: "Initializing…", progRun: "Starting…", progUDP: "Listening UDP…", progEnd: "Finished ✓",
+    wStatus: "Connecting to Tuya Cloud…",
+    credits: "",
+    copyCol: "Copy",
+    copyRow: "⧉",
+    thActions: "Actions",
+    tblHint: "Full values (no truncation) — scroll horizontally on a narrow screen. Each field has a ⧉ copy button.",
+    helpModalTitle: "Tuya API — find Access ID / Secret",
+    helpModalText: "Screenshots are bundled in the add-on (work via Ingress / HTTPS). 1) Project Management → Open Project. 2) Overview → copy Access ID and Secret.",
+    helpClose: "Close",
+    helpCapSchematic: "Project Management — open project",
+    helpCapKeys: "Access ID / Secret — what to copy",
+    helpCapLink: "Link Tuya App Account",
+    btnOpenHelpPage: "Open help page",
+    colorLabel: "Color",
+    copyName: "Copy name",
+    copyIp: "Copy IP",
+    copyMac: "Copy MAC",
+    copyVer: "Copy version",
+    copyId: "Copy Device ID",
+    copyPid: "Copy Product ID",
+    copyKey: "Copy Local Key",
+    toastCopied: "Copied",
+    toastCopyFail: "Copy failed",
+    tipProbe: "Probe: quick local test — whether IP + Local Key + protocol version work (status()). Green OK = key is good.",
+    tipDps: "DPS: read raw device datapoints (switches, brightness, etc.). Also shows Cloud mapping names.",
+    tipMon: "Monitor: several status reads ~every 2s — checks local connection stability.",
+    tipCopy: "Copy the whole row (name, IP, MAC, version, ID, Product, Local Key) to clipboard.",
+    tipScan: "Scans the LAN (UDP/TCP) for Tuya devices: IP, Device ID, protocol version.",
+    tipWizard: "Fetches Local Key and names — Method A (Smart Life QR) or Method B (Access ID/Secret + IoT Core).",
+    tipExport: "Export device list to a JSON file.",
+    tipSaveBackup: "Save devices+keys snapshot to /data/exports (survives add-on restart).",
+    tipDownloadBackup: "Download selected backup JSON to your PC.",
+    tipRestoreBackup: "Restore devices and keys from selected backup.",
+    tipLocaltuya: "Generate LocalTuya YAML (host, device_id, local_key, protocol_version).",
+    tipTuyaLocal: "Generate tuya-local YAML (make-all).",
+    tipRegion: "Tuya project data-center region (eu / eu-w / us…). Wrong region = Cloud error.",
+    tipKey: "Access ID / Client ID from project Overview on iot.tuya.com",
+    tipSecret: "Access Secret / Client Secret from project Overview on iot.tuya.com",
+    tipDevice: "Optional Device ID — if empty, add-on uses an ID from the local scan.",
+    tipForceCidr: "Force subnet scan (e.g. 192.168.100.0/24) when broadcasts fail.",
+    tipTheme: "Toggle light / dark theme",
+    tipColor: "UI accent color",
+    helpSteps: [
+      "Open iot.tuya.com and sign in",
+      "Cloud → Development → open your project",
+      "In Overview copy Access ID/Client ID and Access Secret",
+      "Devices → Link Tuya App Account (Smart Life / Tuya)",
+      "Make sure IoT Core is active (Extend trial if expired)"
+    ],
+    dpsBtn: "DPS",
+    dpsTitle: "DPS Diagnostics",
+    dpsClose: "Close",
+    noData: "No data",
+    qOnline: "Online",
+    qKey: "With Local Key",
+    qMac: "With MAC",
+    qProduct: "With Product ID"
+  },
+  de: {
+    headerSub: "Scanner für Tuya-Geräte im lokalen Netzwerk",
+    statTotal: "Gefundene Geräte", statSub1: "im lokalen Netzwerk",
+    statV33: "Protokoll v3.3", statV34: "Protokoll v3.4", statKey: "Mit Local Key",
+    scanTitle: "Netzwerkscan", ivLbl: "alle 1h",
+    step1Help: "Schritt 1 scannt das lokale Netzwerk und erkennt IP + Device ID + Protokollversion.",
+    step2Help: "Schritt 2 lädt Local Key und Gerätenamen aus der Tuya Cloud (Wizard).",
+    step3Help: "Schritt 4 führt Scan + Cloud zusammen. Local Key ist standardmäßig verborgen — „Keys zeigen“.",
+    haSyncTitle: "Sync mit tuya-local (IP)",
+    haSyncHelp: "Vergleicht LAN-Scan-IPs mit tuya_local Hosts. QR liefert öffentliche Cloud-IPs — die werden ignoriert. Zuerst scannen, dann IP reparieren.",
+    lblHaRefresh: "HA aktualisieren",
+    haMetaNone: "Keine HA-Daten — auf HA aktualisieren klicken",
+    haMetaOk: "tuya_local: {n} Einträge · IP-Differenzen: {m} · sync: {at}",
+    haNoMismatch: "Keine IP-Differenzen — passt zum Scan (oder zuerst scannen).",
+    haFixBtn: "IP reparieren",
+    haFixOk: "IP in HA aktualisiert",
+    haFixFail: "IP-Fix fehlgeschlagen: ",
+    haFixNeedLan: "Keine LAN-IP — zuerst scannen",
+    lblToggleKeys: "Keys zeigen",
+    lblHideKeys: "Keys verbergen",
+    thDisc: "Quelle",
+    discBroadcast: "broadcast",
+    discProbe: "probe",
+    discScan: "scan",
+    tipHaRefresh: "Lädt tuya_local Config-Einträge aus Home Assistant.",
+    tipHaFix: "Schreibt die neue IP über den tuya_local Options-Flow.",
+    lblDur: "SCAN DAUER", lblSec: "Sekunden", btnScan: "Netzwerk scannen", btnScanRun: "Scan läuft…",     btnExport: "JSON exportieren",
+    lblSaveBackup: "Backup speichern",
+    lblDownloadBackup: "Auf PC laden",
+    lblRestoreBackup: "Wiederherstellen",
+    backupNone: "Noch kein Backup gespeichert",
+    backupMeta: "Letztes Backup: {at} · Geräte: {devices} · mit Key: {keys} ({reason})",
+    backupHelp: "Nach dem Key-Abruf werden Daten automatisch in /data/exports gespeichert (übersteht Addon-Neustarts).",
+    toastBackupSaved: "Backup gespeichert in /data/exports",
+    toastBackupRestored: "Backup wiederhergestellt ({devices} Geräte)",
+    toastBackupEmpty: "Nichts zum Speichern",
+    toastBackupFail: "Backup-Fehler: ",
+    lblExportLocaltuya: "LocalTuya YAML",
+    lblExportTuyaLocal: "tuya-local YAML",
+    toastExportOk: "{n} Geräte exportiert",
+    toastExportEmpty: "Keine Geräte mit Local Key",
+    probeBtn: "Probe",
+    monBtn: "Mon",
+    probeOk: "OK {ms}ms",
+    probeFail: "FAIL",
+    toastProbeOk: "Probe OK ({ms} ms)",
+    toastProbeFail: "Probe FAIL: ",
+    toastMonDone: "Monitor: {summary}",
+    dpsNamedTitle: "Benannte DPS (Mapping)",
+    scanIdle: "Bereit", scanRunning: "Scan läuft",
+    wizTitle: "Keys aus Cloud abrufen",
+    howToTitle: "Methode B — Access ID / Secret (iot.tuya.com)", howToText: "1. Bei iot.tuya.com anmelden → 2. Cloud-Projekt erstellen/öffnen → 3. Overview: Access ID + Secret → 4. Devices → Link Tuya App Account → 5. IoT Core API aktivieren (bei Ablauf verlängern). Zuerst Netzwerkscan — Device ID wird automatisch übernommen.",
+    qrTitle: "Methode A — QR-Login (Smart Life)",
+    qrHelp: "Ohne iot.tuya.com / IoT Core. User Code in der App: Me → ⚙️ → Account and Security → User Code. Dann QR scannen (+ → Scan) und Login bestätigen.",
+    lblQrUser: "User Code",
+    lblQrScheme: "QR-App",
+    lblQrStart: "QR zeigen und anmelden",
+    lblQrFetch: "Keys holen (QR)",
+    lblQrRefresh: "Aus Cloud aktualisieren",
+    lblQrLogout: "QR abmelden",
+    qrOrLabel: "oder klassisch (IoT Core)",
+    qrStatusWait: "Warte auf Scan in der App…",
+    qrStatusOk: "Angemeldet — hole Keys…",
+    qrStatusExpired: "QR abgelaufen — neu erzeugen",
+    qrStatusFetching: "Hole Keys aus der Cloud…",
+    qrScanHint: "Smart Life → + → Scan → Confirm login (kann „Home Assistant“ zeigen — OK).",
+    qrNeedCode: "User Code eingeben",
+    qrFetchOk: "QR-Keys geholt: {n} Geräte ({k} mit Local Key)",
+    qrFetchCached: "Aus QR-Cache ({age}): {n} Geräte ({k} mit Local Key)",
+    qrCacheMeta: "QR-Cache: {n} Geräte · Alter {age} · TTL 24h",
+    qrCacheEmpty: "Kein QR-Cache — Keys holen oder aus Cloud aktualisieren.",
+    qrLoggedIn: "QR-Sitzung aktiv — hole Keys…",
+    qrLoggedOut: "QR abgemeldet",
+    lblPushTuyaLocal: "Push tuya-local",
+    tipPushTuyaLocal: "Geräte mit Key wählen → YAML + HA-Status (neu / bereits / IP-Differenz).",
+    pushModalTitle: "Push zu tuya-local",
+    pushModalIntro: "Gewählte Geräte → tuya-local-YAML. Neue in HA hinzufügen. Bei IP-Differenz Fix nutzen.",
+    pushSummary: "Gewählt: {n} · in HA: {ha} · neu: {new} · IP-Differenzen: {mm}",
+    pushEmpty: "Keine Geräte mit Local Key zum Push.",
+    pushBadgeHa: "in HA",
+    pushBadgeNew: "neu",
+    pushBadgeMm: "IP ≠",
+    lblCopyPushYaml: "YAML kopieren",
+    lblDownloadPushYaml: "YAML laden",
+    toastPushCopied: "YAML kopiert",
+    iotCoreTitle: "Erkannt: IoT Core subscription has expired (28841002)",
+    iotCoreText: "Kein Addon-Fehler — Tuya hat die API gesperrt. Trial verlängern ODER Methode A (QR-Login) nutzen.",
+    iotCoreOpenBtn: "📋 Anleitung zur Trial-Verlängerung anzeigen",
+    iotCoreModalTitle: "IoT Core abgelaufen — kostenlosen Trial verlängern",
+    iotCoreModalIntro: "Kein Addon-Fehler — Tuya hat die API gesperrt (Code 28841002). Du kannst IoT Core überspringen und Methode A (QR) nutzen, oder die Schritte unten ausführen.",
+    iotCoreModalSteps: [
+      "iot.tuya.com öffnen und anmelden",
+      "Cloud → Cloud Services",
+      "IoT Core → View details → Extend trial",
+      "Formular: Individual Developer, Less than 50 devices, längste Extension Period, Überblick: personal Home Assistant / local keys (non-commercial)",
+      "Absenden, auf Freigabe warten, dann Keys erneut in diesem Addon abrufen"
+    ],
+    iotCoreModalNote: "Keinen teuren Enterprise-Plan kaufen — kostenloses Extend trial oder QR-Login.",
+    iotCoreOkBtn: "OK, verstanden",
+    wizHelpLink: "📷 Hier klicken, um den Setup-Screenshot zu sehen",
+    lblRegion: "API-Region", lblKey: "Client ID", lblSecret: "Client Secret", lblDevice: "Device ID (optional)", btnWizRun: "Ausführen und Keys holen",
+    tblTitle: "Ergebnisse (zusammengeführt)", fltAll: "Alle", fltKey: "Mit Key",
+    thName: "Name", thVer: "Version", thKey: "Local Key",
+    emptyMsg: "<strong>Netzwerk scannen</strong> um Geräte zu finden",
+    wizDone: "✅ Heruntergeladene Geräte mit Keys:",
+    noKey: "⚠ Kein Key",
+    toastScan: "{} Geräte gefunden", toastKey: "Keys für {} Geräte heruntergeladen",
+    progInit: "Initialisiere…", progRun: "Starte…", progUDP: "Höre UDP…", progEnd: "Fertig ✓",
+    wStatus: "Verbinde mit Tuya Cloud…",
+    credits: "",
+    copyCol: "Kopieren",
+    copyRow: "⧉",
+    thActions: "Aktionen",
+    tblHint: "Volle Werte ohne Kürzung — bei schmalem Bildschirm horizontal scrollen. Jedes Feld hat einen ⧉ Kopier-Button.",
+    helpModalTitle: "Tuya API — Access ID / Secret finden",
+    helpModalText: "Screenshots sind im Addon (funktionieren über Ingress / HTTPS). 1) Project Management → Open Project. 2) Overview → Access ID und Secret kopieren.",
+    helpClose: "Schließen",
+    helpCapSchematic: "Project Management — Projekt öffnen",
+    helpCapKeys: "Access ID / Secret — was kopieren",
+    helpCapLink: "Link Tuya App Account",
+    btnOpenHelpPage: "Hilfeseite öffnen",
+    colorLabel: "Farbe",
+    copyName: "Name kopieren",
+    copyIp: "IP kopieren",
+    copyMac: "MAC kopieren",
+    copyVer: "Version kopieren",
+    copyId: "Device ID kopieren",
+    copyPid: "Product ID kopieren",
+    copyKey: "Local Key kopieren",
+    toastCopied: "Kopiert",
+    toastCopyFail: "Kopieren fehlgeschlagen",
+    tipProbe: "Probe: schneller lokaler Test — ob IP + Local Key + Protokollversion funktionieren (status()). Grün OK = Key gut.",
+    tipDps: "DPS: Roh-Datapoints lesen (Schalter, Helligkeit usw.). Zeigt auch Cloud-Mapping-Namen.",
+    tipMon: "Monitor: mehrere Status-Lesungen ~alle 2s — prüft lokale Verbindungsstabilität.",
+    tipCopy: "Ganze Zeile in die Zwischenablage kopieren.",
+    tipScan: "Scannt das LAN (UDP/TCP) nach Tuya-Geräten: IP, Device ID, Protokollversion.",
+    tipWizard: "Holt Local Key und Namen — Methode A (Smart Life QR) oder B (Access ID/Secret + IoT Core).",
+    tipExport: "Geräteliste als JSON exportieren.",
+    tipSaveBackup: "Snapshot in /data/exports speichern (übersteht Neustart).",
+    tipDownloadBackup: "Gewähltes Backup-JSON auf den PC laden.",
+    tipRestoreBackup: "Geräte und Keys aus Backup wiederherstellen.",
+    tipLocaltuya: "LocalTuya-YAML erzeugen.",
+    tipTuyaLocal: "tuya-local-YAML erzeugen.",
+    tipRegion: "Tuya-Datenregion (eu / eu-w / us…). Falsche Region = Cloud-Fehler.",
+    tipKey: "Access ID / Client ID aus Overview auf iot.tuya.com",
+    tipSecret: "Access Secret / Client Secret aus Overview auf iot.tuya.com",
+    tipDevice: "Optionale Device ID — leer = ID aus lokalem Scan.",
+    tipForceCidr: "Erzwungener Subnetz-Scan (z. B. 192.168.100.0/24).",
+    tipTheme: "Hell / Dunkel umschalten",
+    tipColor: "UI-Akzentfarbe",
+    helpSteps: [
+      "iot.tuya.com öffnen und anmelden",
+      "Cloud → Development → Projekt öffnen",
+      "In Overview Access ID/Client ID und Access Secret kopieren",
+      "Devices → Link Tuya App Account (Smart Life / Tuya)",
+      "IoT Core muss aktiv sein (Extend trial bei Ablauf)"
+    ],
+    dpsBtn: "DPS",
+    dpsTitle: "DPS Diagnose",
+    dpsClose: "Schließen",
+    noData: "Keine Daten",
+    qOnline: "Online",
+    qKey: "Mit Local Key",
+    qMac: "Mit MAC",
+    qProduct: "Mit Product ID"
+  },
+  fr: {
+    headerSub: "Scanner d'appareils Tuya sur le réseau local",
+    statTotal: "Appareils trouvés", statSub1: "sur le réseau local",
+    statV33: "Protocole v3.3", statV34: "Protocole v3.4", statKey: "Avec clé locale",
+    scanTitle: "Scan du réseau", ivLbl: "toutes les 1h",
+    step1Help: "Étape 1 scanne le réseau local et détecte IP + Device ID + version du protocole.",
+    step2Help: "Étape 2 récupère Local Key et noms d'appareils depuis Tuya Cloud (wizard).",
+    step3Help: "Étape 4 fusionne scan + cloud. Local Key est masquée par défaut — utilisez Afficher les clés.",
+    haSyncTitle: "Sync avec tuya-local (IP)",
+    haSyncHelp: "Compare les IP du scan LAN aux hosts tuya_local. Le QR renvoie des IP cloud publiques — ignorées. Scannez le LAN d'abord, puis corrigez.",
+    lblHaRefresh: "Actualiser HA",
+    haMetaNone: "Pas de données HA — cliquez Actualiser HA",
+    haMetaOk: "tuya_local: {n} entrées · écarts IP: {m} · sync: {at}",
+    haNoMismatch: "Pas d'écart IP — conforme au scan (ou lancez un scan d'abord).",
+    haFixBtn: "Corriger IP",
+    haFixOk: "IP mise à jour dans HA",
+    haFixFail: "Échec Fix IP: ",
+    haFixNeedLan: "Pas d'IP LAN — lancez un scan",
+    lblToggleKeys: "Afficher les clés",
+    lblHideKeys: "Masquer les clés",
+    thDisc: "Source",
+    discBroadcast: "broadcast",
+    discProbe: "probe",
+    discScan: "scan",
+    tipHaRefresh: "Charge les entrées tuya_local depuis Home Assistant.",
+    tipHaFix: "Écrit la nouvelle IP via le flux d'options tuya_local.",
+    lblDur: "DURÉE DU SCAN", lblSec: "secondes", btnScan: "Scanner le réseau", btnScanRun: "Scan en cours…",     btnExport: "Exporter JSON",
+    lblSaveBackup: "Enregistrer backup",
+    lblDownloadBackup: "Télécharger sur PC",
+    lblRestoreBackup: "Restaurer",
+    backupNone: "Aucun backup enregistré",
+    backupMeta: "Dernier backup: {at} · appareils: {devices} · avec clé: {keys} ({reason})",
+    backupHelp: "Après récupération des clés, les données sont auto-sauvegardées dans /data/exports (survit aux redémarrages).",
+    toastBackupSaved: "Backup enregistré dans /data/exports",
+    toastBackupRestored: "Backup restauré ({devices} appareils)",
+    toastBackupEmpty: "Rien à enregistrer",
+    toastBackupFail: "Erreur backup: ",
+    lblExportLocaltuya: "LocalTuya YAML",
+    lblExportTuyaLocal: "tuya-local YAML",
+    toastExportOk: "{n} appareils exportés",
+    toastExportEmpty: "Aucun appareil avec Local Key",
+    probeBtn: "Probe",
+    monBtn: "Mon",
+    probeOk: "OK {ms}ms",
+    probeFail: "FAIL",
+    toastProbeOk: "Probe OK ({ms} ms)",
+    toastProbeFail: "Probe FAIL: ",
+    toastMonDone: "Monitor: {summary}",
+    dpsNamedTitle: "DPS nommés (mapping)",
+    scanIdle: "Inactif", scanRunning: "Scan en cours",
+    wizTitle: "Récupérer les clés du Cloud",
+    howToTitle: "Méthode B — Access ID / Secret (iot.tuya.com)", howToText: "1. Connectez-vous à iot.tuya.com → 2. Créez/ouvrez un projet Cloud → 3. Overview: Access ID + Secret → 4. Devices → Link Tuya App Account → 5. Activez l'API IoT Core (renouvelez si expirée). Lancez d'abord un scan réseau — Device ID est choisi automatiquement.",
+    qrTitle: "Méthode A — login QR (Smart Life)",
+    qrHelp: "Sans iot.tuya.com / IoT Core. User Code dans l'app: Me → ⚙️ → Account and Security → User Code. Puis scannez le QR (+ → Scan) et confirmez.",
+    lblQrUser: "User Code",
+    lblQrScheme: "App QR",
+    lblQrStart: "Afficher QR et se connecter",
+    lblQrFetch: "Récupérer les clés (QR)",
+    lblQrRefresh: "Rafraîchir depuis le cloud",
+    lblQrLogout: "Déconnexion QR",
+    qrOrLabel: "ou classique (IoT Core)",
+    qrStatusWait: "En attente du scan dans l'app…",
+    qrStatusOk: "Connecté — récupération des clés…",
+    qrStatusExpired: "QR expiré — régénérez",
+    qrStatusFetching: "Récupération des clés depuis le cloud…",
+    qrScanHint: "Smart Life → + → Scan → Confirm login (peut afficher Home Assistant — OK).",
+    qrNeedCode: "Entrez le User Code",
+    qrFetchOk: "Clés QR récupérées: {n} appareils ({k} avec Local Key)",
+    qrFetchCached: "Depuis le cache QR ({age}): {n} appareils ({k} avec Local Key)",
+    qrCacheMeta: "Cache QR: {n} appareils · âge {age} · TTL 24h",
+    qrCacheEmpty: "Pas de cache QR — récupérez ou rafraîchissez depuis le cloud.",
+    qrLoggedIn: "Session QR active — récupération des clés…",
+    qrLoggedOut: "QR déconnecté",
+    lblPushTuyaLocal: "Push tuya-local",
+    tipPushTuyaLocal: "Sélectionnez les appareils avec clé → YAML + statut HA (nouveau / déjà / écart IP).",
+    pushModalTitle: "Push vers tuya-local",
+    pushModalIntro: "Appareils sélectionnés → YAML tuya-local. Ajoutez les nouveaux dans HA. Corrigez l'IP si besoin.",
+    pushSummary: "Sélectionnés: {n} · dans HA: {ha} · nouveaux: {new} · écarts IP: {mm}",
+    pushEmpty: "Aucun appareil avec Local Key à pousser.",
+    pushBadgeHa: "dans HA",
+    pushBadgeNew: "nouveau",
+    pushBadgeMm: "IP ≠",
+    lblCopyPushYaml: "Copier YAML",
+    lblDownloadPushYaml: "Télécharger YAML",
+    toastPushCopied: "YAML copié",
+    iotCoreTitle: "Détecté: IoT Core subscription has expired (28841002)",
+    iotCoreText: "Ce n'est pas un bug de l'addon — Tuya a bloqué l'API. Renouvelez l'essai OU utilisez la Méthode A (QR).",
+    iotCoreOpenBtn: "📋 Afficher les instructions de renouvellement",
+    iotCoreModalTitle: "IoT Core expiré — renouvelez l'essai gratuit",
+    iotCoreModalIntro: "Ce n'est pas un bug de l'addon — Tuya a bloqué l'API (code 28841002). Vous pouvez ignorer IoT Core et utiliser la Méthode A (QR), ou suivre les étapes ci-dessous.",
+    iotCoreModalSteps: [
+      "Ouvrez iot.tuya.com et connectez-vous",
+      "Cloud → Cloud Services",
+      "IoT Core → View details → Extend trial",
+      "Formulaire: Individual Developer, Less than 50 devices, Extension Period max, overview: personal Home Assistant / local keys (non-commercial)",
+      "Envoyez, attendez l'approbation, puis relancez Get keys dans cet addon"
+    ],
+    iotCoreModalNote: "N'achetez pas le plan Enterprise coûteux — utilisez Extend trial gratuit ou login QR.",
+    iotCoreOkBtn: "OK, compris",
+    wizHelpLink: "📷 Cliquez ici pour voir la capture d'écran de configuration",
+    lblRegion: "Région API", lblKey: "Client ID", lblSecret: "Client Secret", lblDevice: "Device ID (optionnel)", btnWizRun: "Exécuter et récupérer les clés",
+    tblTitle: "Résultats (table fusionnée)", fltAll: "Tous", fltKey: "Avec clé",
+    thName: "Nom", thVer: "Version", thKey: "Clé locale",
+    emptyMsg: "<strong>Scanner le réseau</strong> pour détecter les appareils",
+    wizDone: "✅ Appareils téléchargés avec clés:",
+    noKey: "⚠ Pas de clé",
+    toastScan: "{} appareils trouvés", toastKey: "Clés téléchargées pour {} appareils",
+    progInit: "Initialisation…", progRun: "Démarrage…", progUDP: "Écoute UDP…", progEnd: "Terminé ✓",
+    wStatus: "Connexion à Tuya Cloud…",
+    credits: "",
+    copyCol: "Copier",
+    copyRow: "⧉",
+    thActions: "Actions",
+    tblHint: "Valeurs complètes (sans troncature) — défilement horizontal sur petit écran. Chaque champ a un bouton ⧉ copier.",
+    helpModalTitle: "Tuya API — trouver Access ID / Secret",
+    helpModalText: "Captures intégrées dans l’addon (OK via Ingress / HTTPS). 1) Project Management → Open Project. 2) Overview → copiez Access ID et Secret.",
+    helpClose: "Fermer",
+    helpCapSchematic: "Project Management — ouvrir le projet",
+    helpCapKeys: "Access ID / Secret — quoi copier",
+    helpCapLink: "Link Tuya App Account",
+    btnOpenHelpPage: "Ouvrir la page d’aide",
+    colorLabel: "Couleur",
+    copyName: "Copier le nom",
+    copyIp: "Copier l'IP",
+    copyMac: "Copier le MAC",
+    copyVer: "Copier la version",
+    copyId: "Copier Device ID",
+    copyPid: "Copier Product ID",
+    copyKey: "Copier Local Key",
+    toastCopied: "Copié",
+    toastCopyFail: "Échec de la copie",
+    tipProbe: "Probe: test local rapide — IP + Local Key + version protocole (status()). Vert OK = clé bonne.",
+    tipDps: "DPS: lecture des datapoints bruts. Affiche aussi les noms du mapping Cloud.",
+    tipMon: "Monitor: plusieurs lectures de statut ~toutes les 2 s — stabilité locale.",
+    tipCopy: "Copier toute la ligne dans le presse-papiers.",
+    tipScan: "Scan LAN (UDP/TCP) des appareils Tuya: IP, Device ID, version.",
+    tipWizard: "Récupère Local Key et noms — Méthode A (QR Smart Life) ou B (Access ID/Secret + IoT Core).",
+    tipExport: "Exporter la liste en JSON.",
+    tipSaveBackup: "Enregistrer un snapshot dans /data/exports.",
+    tipDownloadBackup: "Télécharger le backup JSON sur le PC.",
+    tipRestoreBackup: "Restaurer appareils et clés depuis un backup.",
+    tipLocaltuya: "Générer le YAML LocalTuya.",
+    tipTuyaLocal: "Générer le YAML tuya-local.",
+    tipRegion: "Région du datacenter Tuya (eu / eu-w / us…). Mauvaise région = erreur Cloud.",
+    tipKey: "Access ID / Client ID depuis Overview sur iot.tuya.com",
+    tipSecret: "Access Secret / Client Secret depuis Overview sur iot.tuya.com",
+    tipDevice: "Device ID optionnel — vide = ID du scan local.",
+    tipForceCidr: "Forcer le scan d’un sous-réseau (ex. 192.168.100.0/24).",
+    tipTheme: "Basculer clair / sombre",
+    tipColor: "Couleur d’accent de l’UI",
+    helpSteps: [
+      "Ouvrez iot.tuya.com et connectez-vous",
+      "Cloud → Development → ouvrez le projet",
+      "Dans Overview copiez Access ID/Client ID et Access Secret",
+      "Devices → Link Tuya App Account (Smart Life / Tuya)",
+      "Vérifiez que IoT Core est actif (Extend trial si expiré)"
+    ],
+    dpsBtn: "DPS",
+    dpsTitle: "Diagnostic DPS",
+    dpsClose: "Fermer",
+    noData: "Aucune donnée",
+    qOnline: "En ligne",
+    qKey: "Avec Local Key",
+    qMac: "Avec MAC",
+    qProduct: "Avec Product ID"
+  }
+};
+
+let currLang = localStorage.getItem('lang') || 'en';
+let darkMode = localStorage.getItem('dark') === '1';
+let currAccent = localStorage.getItem('accent') || 'blue';
+
+function changeLang() {
+  currLang = document.getElementById('langSelect').value;
+  localStorage.setItem('lang', currLang);
+  applyLang();
+}
+function applyLang() {
+  const t = tr[currLang];
+  const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+  const setHtml = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+  setText('headerSub', t.headerSub);
+  setText('statTotal', t.statTotal);
+  setText('statSub1', t.statSub1);
+  setText('statV33', t.statV33);
+  setText('statV34', t.statV34);
+  setText('statKey', t.statKey);
+  setText('scanTitle', t.scanTitle);
+  setText('step1Help', t.step1Help);
+  setText('step2Help', t.step2Help);
+  setText('step3Help', t.step3Help);
+  setText('haSyncTitle', t.haSyncTitle);
+  setText('haSyncHelp', t.haSyncHelp);
+  setText('lblHaRefresh', t.lblHaRefresh);
+  setText('lblToggleKeys', keysVisible ? t.lblHideKeys : t.lblToggleKeys);
+  setText('thDisc', t.thDisc);
+  setText('ivLbl', t.ivLbl);
+  setText('lblDur', t.lblDur);
+  setText('lblSec', t.lblSec);
+  setText('btnScan', t.btnScan);
+  if (!wasScanning) setText('scanStateText', t.scanIdle);
+  setText('btnExport', t.btnExport);
+  setText('lblSaveBackup', t.lblSaveBackup);
+  setText('lblDownloadBackup', t.lblDownloadBackup);
+  setText('lblExportLocaltuya', t.lblExportLocaltuya);
+  setText('lblExportTuyaLocal', t.lblExportTuyaLocal);
+  setText('lblRestoreBackup', t.lblRestoreBackup);
+  setText('backupHelp', t.backupHelp);
+  setText('dpsProbeBtn', t.probeBtn);
+  setText('dpsMonBtn', t.monBtn);
+  setText('wizTitle', t.wizTitle);
+  setText('howToTitle', t.howToTitle);
+  setText('howToText', t.howToText);
+  setText('qrTitle', t.qrTitle);
+  setText('qrHelp', t.qrHelp);
+  setText('lblQrUser', t.lblQrUser);
+  setText('lblQrScheme', t.lblQrScheme);
+  setText('lblQrStart', t.lblQrStart);
+  setText('lblQrFetch', t.lblQrFetch);
+  setText('lblQrRefresh', t.lblQrRefresh);
+  setText('lblQrLogout', t.lblQrLogout);
+  setText('qrOrLabel', t.qrOrLabel);
+  setText('qrScanHint', t.qrScanHint);
+  setText('lblPushTuyaLocal', t.lblPushTuyaLocal);
+  setText('pushModalTitle', t.pushModalTitle);
+  setText('pushModalIntro', t.pushModalIntro);
+  setText('lblCopyPushYaml', t.lblCopyPushYaml);
+  setText('lblDownloadPushYaml', t.lblDownloadPushYaml);
+  setText('pushCloseBtn', t.helpClose);
+  setText('iotCoreTitle', t.iotCoreTitle);
+  setText('iotCoreText', t.iotCoreText);
+  setText('iotCoreOpenBtn', t.iotCoreOpenBtn);
+  setText('iotCoreModalTitle', t.iotCoreModalTitle);
+  setText('iotCoreModalIntro', t.iotCoreModalIntro);
+  setText('iotCoreModalNote', t.iotCoreModalNote);
+  setText('iotCoreCloseBtn', t.helpClose);
+  setText('iotCoreOkBtn', t.iotCoreOkBtn);
+  const iotSteps = document.getElementById('iotCoreModalSteps');
+  if (iotSteps && Array.isArray(t.iotCoreModalSteps)) {
+    iotSteps.innerHTML = t.iotCoreModalSteps.map(s => `<li>${s}</li>`).join('');
+  }
+  setText('wizHelpLink', t.wizHelpLink);
+  setText('tblHint', t.tblHint);
+  setText('thActions', t.thActions);
+  setText('helpModalTitle', t.helpModalTitle);
+  setText('helpModalText', t.helpModalText);
+  setText('helpCloseBtn', t.helpClose);
+  setText('helpCapSchematic', t.helpCapSchematic);
+  setText('helpCapKeys', t.helpCapKeys);
+  setText('helpCapLink', t.helpCapLink);
+  setText('btnOpenHelpPage', t.btnOpenHelpPage);
+  setText('colorLabel', t.colorLabel);
+  const steps = document.getElementById('helpModalSteps');
+  if (steps && Array.isArray(t.helpSteps)) {
+    steps.innerHTML = t.helpSteps.map(s => `<li>${s}</li>`).join('');
+  }
+  applyTooltips(t);
+  setText('lblRegion', t.lblRegion);
+  setText('lblKey', t.lblKey);
+  setText('lblSecret', t.lblSecret);
+  setText('lblDevice', t.lblDevice);
+  setText('btnWizRun', t.btnWizRun);
+  setText('tblTitle', t.tblTitle);
+  setText('fltAll', t.fltAll);
+  setText('fltKey', t.fltKey);
+  setHtml('emptyMsg', t.emptyMsg);
+  setText('thName', t.thName);
+  setText('thVer', t.thVer);
+  setText('thKey', t.thKey);
+  setText('dpsTitle', t.dpsTitle);
+  setText('dpsCloseBtn', t.dpsClose);
+  setText('dpsPre', t.noData);
+  setHtml(
+    'credits',
+    `<a href="https://github.com/Adam7411/tuya_scanner" target="_blank">TuyaKeyLoc</a>`
+  );
+  renderDevices();
+}
+
+function toggleTheme() {
+  darkMode = !darkMode;
+  localStorage.setItem('dark', darkMode ? '1' : '0');
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  document.querySelector('.theme-toggle').textContent = darkMode ? '☀️' : '🌙';
+}
+
+function setAccent(name) {
+  const accent = String(name || 'blue');
+  document.documentElement.setAttribute('data-accent', accent);
+  localStorage.setItem('accent', accent);
+  document.querySelectorAll('.color-dot').forEach(btn => {
+    btn.classList.toggle('act', btn.getAttribute('data-accent') === accent);
+  });
+}
+
+function escapeAttr(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+function applyTooltips(t) {
+  const tip = (id, text) => {
+    const el = document.getElementById(id);
+    if (el && text) el.title = text;
+  };
+  tip('themeToggleBtn', t.tipTheme);
+  tip('colorDots', t.tipColor);
+  tip('btn-scan', t.tipScan);
+  tip('btnExport', t.tipExport);
+  tip('forceCidrs', t.tipForceCidr);
+  tip('btnHaRefresh', t.tipHaRefresh);
+  tip('btn-wizard', t.tipWizard);
+  tip('w-region', t.tipRegion);
+  tip('w-key', t.tipKey);
+  tip('w-secret', t.tipSecret);
+  tip('w-device', t.tipDevice);
+  tip('btnSaveBackup', t.tipSaveBackup);
+  tip('btnDownloadBackup', t.tipDownloadBackup);
+  tip('btnRestoreBackup', t.tipRestoreBackup);
+  tip('btnExportLocaltuya', t.tipLocaltuya);
+  tip('btnExportTuyaLocal', t.tipTuyaLocal);
+  tip('btnPushTuyaLocal', t.tipPushTuyaLocal);
+  tip('dpsProbeBtn', t.tipProbe);
+  tip('dpsMonBtn', t.tipMon);
+}
+
+// API - use relative path from current page location
+// This works both with direct access (http://IP:7080/) and ingress
+async function api(path, opts = {}) {
+  const clean = String(path || '').replace(/^\/+/, '');
+  const candidates = [
+    './' + clean,      // works when URL has trailing slash
+    clean,             // works in some ingress rewrites
+    '/' + clean        // absolute fallback
+  ];
+
+  let lastError = null;
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, opts);
+      const text = await r.text();
+      let data = {};
+      if (text && text.trim()) {
+        try { data = JSON.parse(text); } catch (e) {
+          if (!r.ok) throw new Error('HTTP ' + r.status + ': ' + text.substring(0, 80));
+          throw new Error('Invalid JSON from ' + url);
+        }
+      }
+      if (!r.ok) {
+        const err = new Error(data.msg || data.error || ('HTTP ' + r.status));
+        err.code = data.error;
+        err.data = data;
+        throw err;
+      }
+      return data;
+    } catch (e) {
+      lastError = e;
+      console.warn('API attempt failed:', url, e.message);
+    }
+  }
+  throw lastError || new Error('API unreachable');
+}
+
+// Test API connectivity on load
+async function testApi() {
+  console.log('=== Testing API connectivity ===');
+  console.log('Current URL:', window.location.href);
+  console.log('Expected API: ./api/status');
+  try {
+    const r = await fetch('./api/status');
+    console.log('Test fetch result:', r.status, r.ok);
+    if (r.ok) {
+      const data = await r.json();
+      console.log('Test data:', data);
+    } else {
+      const text = await r.text();
+      console.log('Test error response:', text.substring(0, 200));
+    }
+  } catch(e) {
+    console.error('Test fetch failed:', e);
+  }
+}
+
+// Scan
+async function doScan() {
+  const dur = parseInt(document.getElementById('dur').value) || 18;
+  const forceCidrs = (document.getElementById('forceCidrs')?.value || '').trim();
+  console.log('doScan called, duration:', dur);
+  try {
+    const result = await api('/api/scan', {
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify({duration: dur, forceCidrs})
+    });
+    if (!result || result.ok === false) throw new Error(result?.msg || 'Nie udało się uruchomić skanu');
+    console.log('Scan API result:', result);
+    const t = tr[currLang];
+    document.getElementById('scanState').classList.add('running');
+    document.getElementById('scanStateText').textContent = t.scanRunning;
+    document.getElementById('btnScan').textContent = t.btnScanRun;
+    document.getElementById('btn-scan').disabled = true;
+    document.getElementById('prog-wrap').classList.add('show');
+    document.getElementById('logbox').innerHTML = '';
+    document.getElementById('prog-fill').style.width = '0%';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('prog-status').textContent = t.progRun;
+  } catch(e) { 
+    console.error('Scan error:', e);
+    toast('Błąd: ' + e.message); 
+  }
+}
+
+// Wizard
+async function doWizard() {
+  const region = document.getElementById('w-region').value;
+  const key = document.getElementById('w-key').value.trim();
+  const secret = document.getElementById('w-secret').value.trim();
+  const deviceId = (document.getElementById('w-device')?.value || '').trim();
+  if (!key || !secret) { toast('Wpisz API Key i Secret'); return; }
+  try {
+    const body = {region, apiKey: key, apiSecret: secret};
+    if (deviceId) body.deviceId = deviceId;
+    await api('/api/wizard', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    document.getElementById('btn-wizard').disabled = true;
+    document.getElementById('w-prog-wrap').classList.add('show');
+  } catch(e) { toast('Błąd: ' + e.message); }
+}
+
+let qrToken = null;
+let qrPollTimer = null;
+let qrLoggedIn = false;
+
+function setQrLoggedIn(on) {
+  qrLoggedIn = !!on;
+  const fetchBtn = document.getElementById('btnQrFetch');
+  const refreshBtn = document.getElementById('btnQrRefresh');
+  const logoutBtn = document.getElementById('btnQrLogout');
+  if (fetchBtn) fetchBtn.disabled = !qrLoggedIn;
+  if (refreshBtn) refreshBtn.disabled = !qrLoggedIn;
+  if (logoutBtn) logoutBtn.disabled = !qrLoggedIn;
+}
+
+function setQrStatus(text, cls) {
+  const el = document.getElementById('qrStatus');
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'qr-status' + (cls ? ' ' + cls : '');
+}
+
+function formatAge(seconds) {
+  if (seconds == null || seconds < 0) return '—';
+  const s = Math.floor(seconds);
+  if (s < 60) return s + 's';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  return Math.floor(s / 3600) + 'h';
+}
+
+function updateQrCacheMeta(meta) {
+  const el = document.getElementById('qrCacheMeta');
+  if (!el) return;
+  const t = tr[currLang];
+  if (!meta || !meta.cached) {
+    el.style.display = qrLoggedIn ? 'block' : 'none';
+    el.textContent = qrLoggedIn ? (t.qrCacheEmpty || '') : '';
+    return;
+  }
+  el.style.display = 'block';
+  el.textContent = (t.qrCacheMeta || '')
+    .replace('{n}', meta.count || 0)
+    .replace('{age}', formatAge(meta.age_s));
+}
+
+function stopQrPoll() {
+  if (qrPollTimer) {
+    clearInterval(qrPollTimer);
+    qrPollTimer = null;
+  }
+}
+
+async function startQrLogin() {
+  const t = tr[currLang];
+  const userCode = (document.getElementById('qr-user')?.value || '').trim();
+  const scheme = document.getElementById('qr-scheme')?.value || 'smartlife';
+  if (!userCode) { toast(t.qrNeedCode); return; }
+  stopQrPoll();
+  try {
+    const data = await api('/api/qr/start', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ user_code: userCode, scheme })
+    });
+    qrToken = data.token;
+    const box = document.getElementById('qrBox');
+    const img = document.getElementById('qrImg');
+    if (box) box.style.display = 'flex';
+    if (img) img.src = data.qr;
+    setQrStatus(t.qrStatusWait, 'wait');
+    localStorage.setItem('qr_user_code', userCode);
+    qrPollTimer = setInterval(pollQrLogin, 2000);
+  } catch (e) {
+    toast((t.toastBackupFail || 'Error: ') + e.message);
+  }
+}
+
+async function pollQrLogin() {
+  if (!qrToken) return;
+  const t = tr[currLang];
+  try {
+    const data = await api('/api/qr/poll', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ token: qrToken })
+    });
+    if (data.status === 'confirmed') {
+      stopQrPoll();
+      qrToken = null;
+      setQrLoggedIn(true);
+      setQrStatus(t.qrStatusOk || t.qrStatusFetching, 'ok');
+      toast(t.qrLoggedIn);
+      await fetchQrDevices(true);
+    } else if (data.status === 'expired') {
+      stopQrPoll();
+      qrToken = null;
+      setQrStatus(t.qrStatusExpired, 'wait');
+    }
+  } catch (_) {
+    // keep polling briefly on transient errors
+  }
+}
+
+async function fetchQrDevices(force) {
+  const t = tr[currLang];
+  const doForce = !!force;
+  try {
+    if (doForce) setQrStatus(t.qrStatusFetching || t.qrStatusOk, 'wait');
+    const data = await api('/api/qr/fetch', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ force: doForce })
+    });
+    updateQrCacheMeta({
+      cached: true,
+      count: data.count || 0,
+      age_s: data.from_cache ? data.cache_age_s : 0,
+      fetched_at: data.cache_fetched_at
+    });
+    const msgTpl = data.from_cache ? (t.qrFetchCached || t.qrFetchOk) : t.qrFetchOk;
+    toast(msgTpl
+      .replace('{n}', data.count || 0)
+      .replace('{k}', data.with_key || 0)
+      .replace('{age}', formatAge(data.cache_age_s)));
+    setQrStatus((t.qrStatusOk || '').split('—')[0].trim() + (t.qrStatusOk ? ' — OK' : 'OK'), 'ok');
+    await tick();
+  } catch (e) {
+    if (String(e.message || '').includes('session') || String(e.message || '') === 'session_invalid') {
+      setQrLoggedIn(false);
+    }
+    toast((t.toastBackupFail || 'Error: ') + e.message);
+  }
+}
+
+async function logoutQr() {
+  const t = tr[currLang];
+  stopQrPoll();
+  qrToken = null;
+  try {
+    await api('/api/qr/logout', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+  } catch (_) {}
+  setQrLoggedIn(false);
+  updateQrCacheMeta(null);
+  const box = document.getElementById('qrBox');
+  if (box) box.style.display = 'none';
+  toast(t.qrLoggedOut);
+}
+
+// Tick
+let wasScanning = false, wasWizard = false, currentFilter = 'all', allDevices = [];
+let iotCorePopupShown = false;
+let keysVisible = false;
+let haMismatches = [];
+let haEntriesCount = 0;
+let haSyncedAt = '';
+let selectedDeviceIds = new Set();
+let pushYamlText = '';
+
+function deviceIdOf(dev) {
+  return String(dev.gwId || dev.id || '');
+}
+
+function toggleSelectDevice(id, checked) {
+  if (!id) return;
+  if (checked) selectedDeviceIds.add(id);
+  else selectedDeviceIds.delete(id);
+  syncSelectAllCheckbox();
+}
+
+function toggleSelectAll(checked) {
+  const list = getVisibleDevices();
+  list.forEach(dev => {
+    const id = deviceIdOf(dev);
+    if (!id) return;
+    if (checked) selectedDeviceIds.add(id);
+    else selectedDeviceIds.delete(id);
+  });
+  renderDevices();
+}
+
+function syncSelectAllCheckbox() {
+  const el = document.getElementById('chkAllDevices');
+  if (!el) return;
+  const list = getVisibleDevices();
+  const ids = list.map(deviceIdOf).filter(Boolean);
+  el.checked = ids.length > 0 && ids.every(id => selectedDeviceIds.has(id));
+  el.indeterminate = !el.checked && ids.some(id => selectedDeviceIds.has(id));
+}
+
+function getVisibleDevices() {
+  let list = allDevices;
+  if (currentFilter === '3.3') list = list.filter(d => String(d.version||'').startsWith('3.3'));
+  else if (currentFilter === '3.4') list = list.filter(d => String(d.version||'').startsWith('3.4'));
+  else if (currentFilter === 'key') list = list.filter(d => d.localKey && d.localKey.length > 3);
+  else if (currentFilter === 'online') list = list.filter(d => d.status === 'online');
+  else if (currentFilter === 'offline') list = list.filter(d => d.status === 'offline');
+  else if (currentFilter === 'cloud') list = list.filter(d => d.status === 'cloud-only');
+  const q = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+  if (q) {
+    list = list.filter(d => {
+      const name = (d.name || d.productName || '').toLowerCase();
+      const ip = String(d.ip || '').toLowerCase();
+      const ver = String(d.version || '').toLowerCase();
+      const gw = String(d.gwId || d.id || '').toLowerCase();
+      const pid = String(d.productKey || '').toLowerCase();
+      const key = String(d.localKey || '').toLowerCase();
+      const mac = String(d.mac || '').toLowerCase();
+      return [name, ip, ver, gw, pid, key, mac].some(v => v.includes(q));
+    });
+  }
+  return list;
+}
+
+function toggleKeysVisible() {
+  keysVisible = !keysVisible;
+  const t = tr[currLang];
+  setText('lblToggleKeys', keysVisible ? t.lblHideKeys : t.lblToggleKeys);
+  renderDevices();
+}
+
+function discLabel(disc, t) {
+  if (disc === 'probe') return t.discProbe;
+  if (disc === 'scan') return t.discScan;
+  if (disc === 'broadcast') return t.discBroadcast;
+  return disc || '–';
+}
+
+function renderHaMismatches(list) {
+  const t = tr[currLang];
+  const box = document.getElementById('haMismatchList');
+  const meta = document.getElementById('haSyncMeta');
+  if (!box) return;
+  const mismatches = (list || []).filter(m => m.mismatch && m.fixable !== false && m.scanned_ip);
+  haMismatches = list || [];
+  if (meta) {
+    if (!haEntriesCount) {
+      meta.textContent = t.haMetaNone;
+    } else {
+      meta.textContent = t.haMetaOk
+        .replace('{n}', haEntriesCount)
+        .replace('{m}', mismatches.length)
+        .replace('{at}', haSyncedAt ? String(haSyncedAt).replace('T', ' ').slice(0, 16) : '–');
+    }
+  }
+  if (!mismatches.length) {
+    box.innerHTML = `<div class="ha-empty">${t.haNoMismatch}</div>`;
+    return;
+  }
+  box.innerHTML = mismatches.map(m => {
+    const title = escapeHtml(m.title || m.device_id || m.entry_id);
+    const oldIp = escapeHtml(m.configured_host || '–');
+    const newIp = escapeHtml(m.scanned_ip || '–');
+    const eid = escapeJs(m.entry_id);
+    const nip = escapeJs(m.scanned_ip);
+    const canFix = m.fixable !== false && m.scanned_ip;
+    const btn = canFix
+      ? `<button class="btn btn-success btn-xs" onclick="fixHaIp('${eid}','${nip}')">${t.haFixBtn}</button>`
+      : `<span class="step-help" style="margin:0">${t.haFixNeedLan || ''}</span>`;
+    return `<div class="ha-mismatch-row">` +
+      `<div class="mm-title">${title}<div style="font-size:.75rem;color:var(--gray)">${escapeHtml(m.state || '')}</div></div>` +
+      `<div class="mm-old">${oldIp}</div>` +
+      `<div class="mm-new">→ ${newIp}</div>` +
+      btn +
+    `</div>`;
+  }).join('');
+}
+
+async function refreshHa() {
+  const t = tr[currLang];
+  try {
+    const data = await api('/api/ha/refresh', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+    haEntriesCount = data.count || (data.entries || []).length || 0;
+    haSyncedAt = data.synced_at || '';
+    renderHaMismatches(data.mismatches || []);
+    toast(t.haMetaOk.replace('{n}', haEntriesCount).replace('{m}', data.mismatch_count || 0).replace('{at}', 'OK'));
+  } catch (e) {
+    toast((t.toastBackupFail || 'Error: ') + e.message);
+  }
+}
+
+async function fixHaIp(entryId, host) {
+  const t = tr[currLang];
+  if (!host) { toast(t.haFixNeedLan || 'Brak LAN IP — najpierw skan sieci'); return; }
+  try {
+    const data = await api('/api/ha/fix', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ entry_id: entryId, host })
+    });
+    renderHaMismatches(data.mismatches || []);
+    toast(t.haFixOk + ': ' + host);
+    await tick();
+  } catch (e) {
+    toast((t.haFixFail || t.toastBackupFail || 'Error: ') + e.message);
+  }
+}
+
+function logsHaveIotCoreExpired(logs) {
+  return (logs || []).some(e => {
+    const m = String(e.msg || '');
+    return (
+      m.includes('IOTCORE_EXPIRED') ||
+      m.includes('28841002') ||
+      (/iot core/i.test(m) && /expired/i.test(m)) ||
+      /cloud development plan has expired/i.test(m)
+    );
+  });
+}
+
+function syncIotCoreAlert(logs) {
+  const box = document.getElementById('iotCoreBox');
+  const expired = logsHaveIotCoreExpired(logs);
+  if (!box) return;
+  if (expired) {
+    box.classList.add('show');
+    if (!iotCorePopupShown) {
+      iotCorePopupShown = true;
+      openIotCoreHelp();
+    }
+  } else {
+    box.classList.remove('show');
+    iotCorePopupShown = false;
+  }
+}
+
+async function tick() {
+  let d;
+  try { 
+    d = await api('/api/status'); 
+    console.log('Status response:', d);
+  } catch(e) { 
+    console.error('API error:', e);
+    return; 
+  }
+  
+  const t = tr[currLang];
+  const scanning = d.scanning;
+  const scanState = document.getElementById('scanState');
+  const scanStateText = document.getElementById('scanStateText');
+  const btnScanText = document.getElementById('btnScan');
+  if (scanning) {
+    document.getElementById('prog-wrap').classList.add('show');
+    const pct = d.progress || 0;
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    const st = pct < 10 ? t.progRun : pct < 85 ? t.progUDP : t.progEnd;
+    document.getElementById('prog-status').textContent = st;
+    document.getElementById('btn-scan').disabled = true;
+    btnScanText.textContent = t.btnScanRun;
+    scanState.classList.add('running');
+    scanStateText.textContent = t.scanRunning;
+  } else {
+    document.getElementById('prog-fill').style.width = '100%';
+    document.getElementById('prog-pct').textContent = '100%';
+    document.getElementById('prog-status').textContent = t.progEnd;
+    document.getElementById('btn-scan').disabled = false;
+    btnScanText.textContent = t.btnScan;
+    scanState.classList.remove('running');
+    scanStateText.textContent = t.scanIdle;
+    if (wasScanning) toast(t.toastScan.replace('{}', d.count?.total ?? 0));
+  }
+  wasScanning = scanning;
+
+  if (d.log && d.log.length) {
+    const box = document.getElementById('logbox');
+    box.innerHTML = '';
+    d.log.forEach(e => {
+      const el = document.createElement('div');
+      el.className = e.level === 'found' ? 'li-found' : e.level === 'warning' ? 'li-warn' : 'li-info';
+      el.textContent = '[' + e.t + '] ' + localizeLog(e.msg, currLang);
+      box.appendChild(el);
+    });
+    box.scrollTop = box.scrollHeight;
+  }
+
+  document.getElementById('s-total').textContent = d.count?.total ?? '–';
+  document.getElementById('s-v33').textContent = d.count?.v33 ?? '–';
+  document.getElementById('s-v34').textContent = d.count?.v34 ?? '–';
+  document.getElementById('s-keys').textContent = d.count?.with_key ?? '–';
+  document.getElementById('s-time').textContent = d.last_scan ? d.last_scan.replace('T', ' ').slice(0,16) : t.statSub1;
+  document.getElementById('q-online').textContent = `${t.qOnline}: ${d.count?.online ?? 0}/${d.count?.total ?? 0}`;
+  document.getElementById('q-key').textContent = `${t.qKey}: ${d.count?.with_key ?? 0}/${d.count?.total ?? 0}`;
+  document.getElementById('q-mac').textContent = `${t.qMac}: ${d.count?.with_mac ?? 0}/${d.count?.total ?? 0}`;
+  document.getElementById('q-product').textContent = `${t.qProduct}: ${d.count?.with_product_id ?? 0}/${d.count?.total ?? 0}`;
+
+  allDevices = d.devices || [];
+  updateBackupMeta(d.last_export);
+  renderDevices();
+
+  const wiz = d.wizard_running;
+  if (wiz) {
+    document.getElementById('w-prog-wrap').classList.add('show');
+    document.getElementById('btn-wizard').disabled = true;
+  } else {
+    document.getElementById('btn-wizard').disabled = false;
+    if (wasWizard && d.wizard_devices && d.wizard_devices.length) {
+      toast(t.toastKey.replace('{}', d.wizard_devices.length));
+    }
+  }
+  wasWizard = wiz;
+
+  if (d.wizard_log && d.wizard_log.length) {
+    const box = document.getElementById('w-logbox');
+    box.innerHTML = '';
+    d.wizard_log.forEach(e => {
+      const el = document.createElement('div');
+      el.className = e.level === 'found' ? 'li-found' : e.level === 'warning' ? 'li-warn' : 'li-info';
+      el.textContent = '[' + e.t + '] ' + localizeLog(e.msg, currLang);
+      box.appendChild(el);
+    });
+    box.scrollTop = box.scrollHeight;
+    document.getElementById('w-status').textContent = localizeLog(d.wizard_log[d.wizard_log.length-1]?.msg || t.wStatus, currLang);
+  }
+  syncIotCoreAlert(d.wizard_log || []);
+
+  if (typeof d.ha_entries !== 'undefined') {
+    haEntriesCount = (d.ha_entries || []).length;
+    haSyncedAt = d.ha_synced_at || haSyncedAt;
+  }
+  if (d.ha_mismatches) {
+    renderHaMismatches(d.ha_mismatches);
+  }
+  if (typeof d.qr_logged_in !== 'undefined') {
+    setQrLoggedIn(d.qr_logged_in);
+  }
+  if (d.qr_scheme) {
+    const sel = document.getElementById('qr-scheme');
+    if (sel && !sel.dataset.userSet) sel.value = d.qr_scheme;
+  }
+  if (d.qr_cache) updateQrCacheMeta(d.qr_cache);
+}
+
+function renderDevices() {
+  const list = getVisibleDevices();
+
+  document.getElementById('empty-state').style.display = list.length ? 'none' : 'block';
+  document.getElementById('tbl-wrap').style.display = list.length ? 'block' : 'none';
+
+  const t = tr[currLang];
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = '';
+  const copyCell = (value, label) => {
+    const v = String(value ?? '');
+    if (!v || v === '–') return `<span class="mono-val">–</span>`;
+    return `<span class="cell-val"><span class="mono-val">${escapeHtml(v)}</span>` +
+      `<button type="button" class="copy-btn" title="${escapeAttr(label)}" onclick="copyText('${escapeJs(v)}')">⧉</button></span>`;
+  };
+  list.forEach(dev => {
+    const ver = String(dev.version || '?');
+    const ip = dev.ip || '–';
+    const gw = dev.gwId || dev.id || '–';
+    const pid = dev.productKey || dev.productId || dev.product_id || dev.pid || '–';
+    const name = dev.name || dev.productName || '–';
+    const hasKey = dev.localKey && dev.localKey.length > 3;
+    const mac = dev.mac || '–';
+    const keyText = hasKey ? dev.localKey : '';
+    const status = dev.status || (dev.ip ? 'online' : 'cloud-only');
+    const rowPayload = [name, ip, mac, ver, gw, pid, keyText].join('\t');
+    const id = deviceIdOf(dev);
+    const checked = id && selectedDeviceIds.has(id) ? 'checked' : '';
+    const row = document.createElement('tr');
+    row.innerHTML =
+      `<td class="col-check"><input type="checkbox" ${checked} onchange="toggleSelectDevice('${escapeJs(id)}', this.checked)"></td>` +
+      `<td><span class="cell-val"><span class="dev-name-cell">${escapeHtml(name)}</span>` +
+        (name !== '–' ? `<button type="button" class="copy-btn" title="${escapeAttr(t.copyName)}" onclick="copyText('${escapeJs(name)}')">⧉</button>` : '') +
+      `</span></td>` +
+      `<td><span class="cell-val"><span class="ip-cell"><span class="online-dot"></span>${escapeHtml(ip)}</span>` +
+        (ip !== '–' ? `<button type="button" class="copy-btn" title="${escapeAttr(t.copyIp)}" onclick="copyText('${escapeJs(ip)}')">⧉</button>` : '') +
+      `</span></td>` +
+      `<td>${copyCell(mac, t.copyMac)}</td>` +
+      `<td><span class="cell-val"><span class="ver-badge ${ver.startsWith('3.3')?'v33':'v34'}">v${escapeHtml(ver)}</span>` +
+        `<button type="button" class="copy-btn" title="${escapeAttr(t.copyVer)}" onclick="copyText('${escapeJs(ver)}')">⧉</button></span></td>` +
+      `<td>${copyCell(gw, t.copyId)}</td>` +
+      `<td>${copyCell(pid, t.copyPid)}</td>` +
+      `<td>` + (hasKey
+        ? `<span class="cell-val"><span class="key-badge key-yes"><span class="${keysVisible ? '' : 'key-blur'}">🔑 ${escapeHtml(dev.localKey)}</span></span>` +
+          `<button type="button" class="copy-btn" title="${escapeAttr(t.copyKey)}" onclick="copyText('${escapeJs(dev.localKey)}')">⧉</button>` +
+          `<button type="button" class="key-reveal-btn" onclick="toggleKeysVisible()">${keysVisible ? '🙈' : '👁'}</button></span>`
+        : `<span class="key-badge key-no">${t.noKey}</span>`) +
+      `</td>` +
+      `<td>${dev.discovery ? `<span class="disc-badge disc-${escapeAttr(dev.discovery)}">${escapeHtml(discLabel(dev.discovery, t))}</span>` : '–'}</td>` +
+      `<td><span class="status-pill">${escapeHtml(status)}</span></td>` +
+      `<td class="col-actions"><div class="actions-row">` +
+        `<button class="btn btn-ghost btn-xs" title="${escapeAttr(t.tipCopy || t.copyCol)}" onclick="copyText('${escapeJs(rowPayload)}')">⧉</button>` +
+        `<button class="btn btn-outline btn-xs" id="probe-${escapeJs(gw)}" title="${escapeAttr(t.tipProbe)}" onclick="probeDevice('${escapeJs(gw)}')">${t.probeBtn}</button>` +
+        `<button class="btn btn-outline btn-xs" title="${escapeAttr(t.tipDps)}" onclick="loadDps('${escapeJs(gw)}')">${t.dpsBtn}</button>` +
+        `<button class="btn btn-outline btn-xs" title="${escapeAttr(t.tipMon)}" onclick="monitorDevice('${escapeJs(gw)}')">${t.monBtn}</button>` +
+      `</div></td>`;
+    tb.appendChild(row);
+  });
+  syncSelectAllCheckbox();
+}
+
+function escapeHtml(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeJs(s) {
+  return String(s || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, ' ')
+    .replace(/\r/g, ' ');
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = String(text || '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(_) {}
+  document.body.removeChild(ta);
+  return ok;
+}
+
+async function copyText(text) {
+  const t = tr[currLang] || {};
+  try {
+    const value = String(text || '');
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(value);
+      toast(t.toastCopied || 'Skopiowano');
+      return;
+    }
+    if (fallbackCopy(value)) {
+      toast(t.toastCopied || 'Skopiowano');
+      return;
+    }
+    toast(t.toastCopyFail || 'Nie udało się skopiować');
+  } catch(_) {
+    if (fallbackCopy(String(text || ''))) toast(t.toastCopied || 'Skopiowano');
+    else toast(t.toastCopyFail || 'Nie udało się skopiować');
+  }
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('act'));
+  const filterId = (
+    f==='all' ? 'fltAll' :
+    f==='3.3' ? 'f33' :
+    f==='3.4' ? 'f34' :
+    f==='key' ? 'fkey' :
+    f==='online' ? 'fonline' :
+    f==='offline' ? 'foffline' : 'fcloud'
+  );
+  const chip = document.getElementById(filterId);
+  if (chip) chip.classList.add('act');
+  renderDevices();
+}
+
+function localizeLog(msg, lang) {
+  const m = String(msg || '');
+  if (lang === 'en') {
+    return m
+      .replace(/^IOTCORE_EXPIRED:\s*/, '')
+      .replace(/^IOTCORE_STEP1:\s*/, '')
+      .replace(/^IOTCORE_STEP2:\s*/, '')
+      .replace(/^IOTCORE_STEP3:\s*/, '')
+      .replace(/^IOTCORE_STEP4:\s*/, '')
+      .replace(/^IOTCORE_STEP5:\s*/, '')
+      .replace(/^IOTCORE_NOTE:\s*/, '');
+  }
+
+  const map = {
+    pl: [
+      ['IOTCORE_EXPIRED: IoT Core subscription has expired (Tuya error 28841002). Local Keys cannot be fetched until renewed.',
+       'IOTCORE wygasło (błąd Tuya 28841002). Local Key nie da się pobrać, dopóki nie odnowisz trialu.'],
+      ['IOTCORE_STEP1: 1) Open https://iot.tuya.com and log in',
+       '1) Otwórz https://iot.tuya.com i zaloguj się'],
+      ['IOTCORE_STEP2: 2) Go to Cloud → Cloud Services (not the paid Enterprise Subscribe page)',
+       '2) Wejdź w Cloud → Cloud Services (nie płatną stronę Enterprise Subscribe)'],
+      ['IOTCORE_STEP3: 3) Find IoT Core → View details → Extend / Renew trial period',
+       '3) Znajdź IoT Core → View details → Extend / Renew trial period'],
+      ['IOTCORE_STEP4: 4) Form tips: Extension Period = longest free option (e.g. 6 months); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact Person/Info = your name + same email as Tuya account',
+       '4) Formularz: Extension Period = najdłuższy darmowy (np. 6 miesięcy); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact = imię + ten sam e-mail co konto Tuya'],
+      ['IOTCORE_STEP5: 5) Submit, wait for approval (often ~1 business day), then re-run Get keys in this add-on',
+       '5) Wyślij, poczekaj na akceptację (często ~1 dzień roboczy), potem ponów „Pobierz klucze” w tym addonie'],
+      ['IOTCORE_NOTE: Do not buy the expensive commercial plan — use free trial extension.',
+       'Uwaga: nie kupuj drogiego planu komercyjnego — użyj darmowego Extend trial.'],
+      ['REGION_RETRY: Trying alternate region', 'REGION_RETRY: Próbuję alternatywny region'],
+      ['REGION_OK: Region', 'REGION_OK: Region'],
+      ['BACKUP_SAVED: Snapshot saved to', 'BACKUP zapisany w'],
+      ['Starting Tuya Cloud key retrieval', 'Uruchamiam pobieranie kluczy z Tuya Cloud'],
+      ['Connecting to Tuya Cloud', 'Łączenie z Tuya Cloud'],
+      ['Fetching device list + Local Keys', 'Pobieranie listy urządzeń + Local Keys'],
+      ['Saved credentials to', 'Zapisano credentials do'],
+      ['Using Device ID:', 'Używam Device ID:'],
+      ['Cloud getdevices error:', 'Błąd Cloud getdevices:'],
+      ['Cloud auth error:', 'Błąd autoryzacji Cloud:'],
+      ['Hint: check API Key/Secret and Region (eu vs eu-w, us vs us-e).',
+       'Wskazówka: sprawdź API Key/Secret oraz Region (eu vs eu-w, us vs us-e).'],
+      ['Hint: check API permissions, Link Tuya App Account, and IoT Core status.',
+       'Wskazówka: sprawdź uprawnienia API, Link Tuya App Account oraz status IoT Core.'],
+      ['Also verify: Devices → Link Tuya App Account, and IoT Core API is enabled.',
+       'Sprawdź też: Devices → Link Tuya App Account oraz włączone IoT Core API.'],
+      ['Starting scan', 'Uruchamiam skan'],
+      ['Completed —', 'Zakończono —'],
+      ['Done —', 'Gotowe —'],
+      ['Loaded', 'Wczytano'],
+      ['Saved', 'Zapisano'],
+      ['Starting network scan', 'Uruchamiam skan sieci'],
+      ['Refreshing network scan to merge IP + keys', 'Odświeżam skan sieci, aby scalić IP + klucze'],
+      ['Launching cloud key wizard', 'Uruchamiam pobieranie kluczy'],
+      ['Starting cloud key wizard', 'Uruchamiam pobieranie kluczy'],
+      ['Scan started', 'Skan uruchomiony'],
+      ['Skipping invalid CIDR', 'Pomijam niepoprawny CIDR'],
+      ['Wizard error', 'Błąd wizarda'],
+      ['Wizard finished. Check logs above.', 'Wizard zakończony. Sprawdź logi powyżej.'],
+      ['Error:', 'Błąd:']
+    ],
+    de: [
+      ['IOTCORE_EXPIRED: IoT Core subscription has expired (Tuya error 28841002). Local Keys cannot be fetched until renewed.',
+       'IOTCORE abgelaufen (Tuya-Fehler 28841002). Local Keys können erst nach Verlängerung abgerufen werden.'],
+      ['IOTCORE_STEP1: 1) Open https://iot.tuya.com and log in',
+       '1) Öffne https://iot.tuya.com und melde dich an'],
+      ['IOTCORE_STEP2: 2) Go to Cloud → Cloud Services (not the paid Enterprise Subscribe page)',
+       '2) Gehe zu Cloud → Cloud Services (nicht die bezahlte Enterprise-Subscribe-Seite)'],
+      ['IOTCORE_STEP3: 3) Find IoT Core → View details → Extend / Renew trial period',
+       '3) Finde IoT Core → View details → Extend / Renew trial period'],
+      ['IOTCORE_STEP4: 4) Form tips: Extension Period = longest free option (e.g. 6 months); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact Person/Info = your name + same email as Tuya account',
+       '4) Formular: Extension Period = längste Gratisoption (z. B. 6 Monate); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact = Name + dieselbe E-Mail wie Tuya-Konto'],
+      ['IOTCORE_STEP5: 5) Submit, wait for approval (often ~1 business day), then re-run Get keys in this add-on',
+       '5) Absenden, auf Freigabe warten (oft ~1 Werktag), dann Keys erneut im Addon abrufen'],
+      ['IOTCORE_NOTE: Do not buy the expensive commercial plan — use free trial extension.',
+       'Hinweis: Keinen teuren kommerziellen Plan kaufen — kostenlose Trial-Verlängerung nutzen.'],
+      ['REGION_RETRY: Trying alternate region', 'REGION_RETRY: Versuche alternative Region'],
+      ['REGION_OK: Region', 'REGION_OK: Region'],
+      ['BACKUP_SAVED: Snapshot saved to', 'BACKUP gespeichert unter'],
+      ['Starting Tuya Cloud key retrieval', 'Starte Abruf der Keys aus Tuya Cloud'],
+      ['Connecting to Tuya Cloud', 'Verbinde mit Tuya Cloud'],
+      ['Fetching device list + Local Keys', 'Lade Geräteliste + Local Keys'],
+      ['Saved credentials to', 'Zugangsdaten gespeichert in'],
+      ['Using Device ID:', 'Verwende Device ID:'],
+      ['Cloud getdevices error:', 'Cloud-getdevices-Fehler:'],
+      ['Cloud auth error:', 'Cloud-Auth-Fehler:'],
+      ['Hint: check API Key/Secret and Region (eu vs eu-w, us vs us-e).',
+       'Hinweis: API Key/Secret und Region prüfen (eu vs eu-w, us vs us-e).'],
+      ['Hint: check API permissions, Link Tuya App Account, and IoT Core status.',
+       'Hinweis: API-Berechtigungen, Link Tuya App Account und IoT-Core-Status prüfen.'],
+      ['Also verify: Devices → Link Tuya App Account, and IoT Core API is enabled.',
+       'Auch prüfen: Devices → Link Tuya App Account und IoT Core API aktiv.'],
+      ['Starting scan', 'Scan wird gestartet'],
+      ['Completed —', 'Abgeschlossen —'],
+      ['Done —', 'Fertig —'],
+      ['Loaded', 'Geladen'],
+      ['Saved', 'Gespeichert'],
+      ['Starting network scan', 'Netzwerkscan wird gestartet'],
+      ['Refreshing network scan to merge IP + keys', 'Netzwerkscan wird aktualisiert, um IP + Keys zusammenzuführen'],
+      ['Launching cloud key wizard', 'Cloud-Key-Assistent wird gestartet'],
+      ['Starting cloud key wizard', 'Cloud-Key-Assistent wird gestartet'],
+      ['Scan started', 'Scan gestartet'],
+      ['Skipping invalid CIDR', 'Ungültiges CIDR wird übersprungen'],
+      ['Wizard error', 'Wizard-Fehler'],
+      ['Wizard finished. Check logs above.', 'Wizard abgeschlossen. Siehe Logs oben.'],
+      ['Error:', 'Fehler:']
+    ],
+    fr: [
+      ['IOTCORE_EXPIRED: IoT Core subscription has expired (Tuya error 28841002). Local Keys cannot be fetched until renewed.',
+       'IOTCORE expiré (erreur Tuya 28841002). Les Local Keys ne peuvent pas être récupérées tant que l’essai n’est pas renouvelé.'],
+      ['IOTCORE_STEP1: 1) Open https://iot.tuya.com and log in',
+       '1) Ouvrez https://iot.tuya.com et connectez-vous'],
+      ['IOTCORE_STEP2: 2) Go to Cloud → Cloud Services (not the paid Enterprise Subscribe page)',
+       '2) Allez dans Cloud → Cloud Services (pas la page payante Enterprise Subscribe)'],
+      ['IOTCORE_STEP3: 3) Find IoT Core → View details → Extend / Renew trial period',
+       '3) Trouvez IoT Core → View details → Extend / Renew trial period'],
+      ['IOTCORE_STEP4: 4) Form tips: Extension Period = longest free option (e.g. 6 months); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact Person/Info = your name + same email as Tuya account',
+       '4) Formulaire: Extension Period = option gratuite la plus longue (ex. 6 mois); Developer Identity = Individual Developer; Estimated Devices = Less than 50; Project Overview = personal Home Assistant / local keys (non-commercial); Contact = nom + même e-mail que le compte Tuya'],
+      ['IOTCORE_STEP5: 5) Submit, wait for approval (often ~1 business day), then re-run Get keys in this add-on',
+       '5) Envoyez, attendez l’approbation (souvent ~1 jour ouvré), puis relancez Get keys dans cet addon'],
+      ['IOTCORE_NOTE: Do not buy the expensive commercial plan — use free trial extension.',
+       'Note: n’achetez pas le plan commercial cher — utilisez l’extension d’essai gratuite.'],
+      ['REGION_RETRY: Trying alternate region', 'REGION_RETRY: Essai région alternative'],
+      ['REGION_OK: Region', 'REGION_OK: Région'],
+      ['BACKUP_SAVED: Snapshot saved to', 'BACKUP enregistré dans'],
+      ['Starting Tuya Cloud key retrieval', 'Démarrage de la récupération des clés Tuya Cloud'],
+      ['Connecting to Tuya Cloud', 'Connexion à Tuya Cloud'],
+      ['Fetching device list + Local Keys', 'Récupération de la liste des appareils + Local Keys'],
+      ['Saved credentials to', 'Identifiants enregistrés dans'],
+      ['Using Device ID:', 'Utilisation du Device ID:'],
+      ['Cloud getdevices error:', 'Erreur Cloud getdevices:'],
+      ['Cloud auth error:', 'Erreur d’auth Cloud:'],
+      ['Hint: check API Key/Secret and Region (eu vs eu-w, us vs us-e).',
+       'Astuce: vérifiez API Key/Secret et Région (eu vs eu-w, us vs us-e).'],
+      ['Hint: check API permissions, Link Tuya App Account, and IoT Core status.',
+       'Astuce: vérifiez les permissions API, Link Tuya App Account et le statut IoT Core.'],
+      ['Also verify: Devices → Link Tuya App Account, and IoT Core API is enabled.',
+       'Vérifiez aussi: Devices → Link Tuya App Account et API IoT Core activée.'],
+      ['Starting scan', 'Démarrage du scan'],
+      ['Completed —', 'Terminé —'],
+      ['Done —', 'Fait —'],
+      ['Loaded', 'Chargé'],
+      ['Saved', 'Enregistré'],
+      ['Starting network scan', 'Démarrage du scan réseau'],
+      ['Refreshing network scan to merge IP + keys', 'Actualisation du scan réseau pour fusionner IP + clés'],
+      ['Launching cloud key wizard', 'Lancement de l’assistant clés cloud'],
+      ['Starting cloud key wizard', 'Démarrage de l’assistant clés cloud'],
+      ['Scan started', 'Scan démarré'],
+      ['Skipping invalid CIDR', 'CIDR invalide ignoré'],
+      ['Wizard error', 'Erreur de l’assistant'],
+      ['Wizard finished. Check logs above.', 'Assistant terminé. Voir les logs ci-dessus.'],
+      ['Error:', 'Erreur :']
+    ]
+  };
+
+  const pairs = map[lang] || [];
+  let out = m;
+  for (const [src, dst] of pairs) {
+    out = out.replaceAll(src, dst);
+  }
+  return out;
+}
+
+let modalDeviceId = null;
+
+async function loadDps(devId) {
+  const t = tr[currLang];
+  modalDeviceId = devId;
+  try {
+    const data = await api('/api/device/' + encodeURIComponent(devId) + '/dps');
+    document.getElementById('dpsMeta').textContent = data?.device
+      ? `${data.device.name || ''} (${data.device.ip || ''}) v${data.device.version || ''}`
+      : devId;
+    const named = data.dps_named || {};
+    const namedBox = document.getElementById('dpsNamed');
+    const keys = Object.keys(named);
+    if (keys.length) {
+      namedBox.style.display = 'grid';
+      namedBox.className = 'dps-named';
+      namedBox.innerHTML = `<div style="grid-column:1/-1;font-weight:700;margin-bottom:4px">${t.dpsNamedTitle}</div>` +
+        keys.map(k => {
+          const n = named[k];
+          return `<div class="dps-chip"><b>${n.name || ('dp_'+k)} <span style="opacity:.6">#${k}</span></b>${JSON.stringify(n.value)}</div>`;
+        }).join('');
+    } else {
+      namedBox.style.display = 'none';
+      namedBox.innerHTML = '';
+    }
+    document.getElementById('dpsPre').textContent = JSON.stringify(data, null, 2);
+    document.getElementById('dpsModal').classList.add('show');
+  } catch (e) {
+    toast((currLang === 'pl' ? 'Błąd DPS: ' : 'DPS error: ') + e.message);
+  }
+}
+
+function openIotCoreHelp() {
+  const t = tr[currLang];
+  const setTxt = (id, text) => { const el = document.getElementById(id); if (el && text != null) el.textContent = text; };
+  setTxt('iotCoreModalTitle', t.iotCoreModalTitle);
+  setTxt('iotCoreModalIntro', t.iotCoreModalIntro);
+  setTxt('iotCoreModalNote', t.iotCoreModalNote);
+  setTxt('iotCoreCloseBtn', t.helpClose);
+  setTxt('iotCoreOkBtn', t.iotCoreOkBtn);
+  const steps = document.getElementById('iotCoreModalSteps');
+  if (steps && Array.isArray(t.iotCoreModalSteps)) {
+    steps.innerHTML = t.iotCoreModalSteps.map(s => `<li>${s}</li>`).join('');
+  }
+  document.getElementById('iotCoreModal')?.classList.add('show');
+}
+
+function closeIotCoreHelp() {
+  document.getElementById('iotCoreModal')?.classList.remove('show');
+}
+
+function helpImgFailed(img, fallbackId) {
+  if (img) img.style.display = 'none';
+  const fb = document.getElementById(fallbackId);
+  if (fb) fb.style.display = 'block';
+}
+
+function loadHelpLocalImg(imgId, fallbackId) {
+  const img = document.getElementById(imgId);
+  const fb = document.getElementById(fallbackId);
+  if (!img) return;
+  const file = img.getAttribute('data-local');
+  if (!file) return;
+  if (fb) fb.style.display = 'none';
+  img.style.display = '';
+  img.onerror = () => helpImgFailed(img, fallbackId);
+  const url = assetUrl(file);
+  img.src = url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now();
+}
+
+function loadHelpRemoteImg(imgId, fallbackId) {
+  const img = document.getElementById(imgId);
+  const fb = document.getElementById(fallbackId);
+  if (!img) return;
+  const src = img.getAttribute('data-src');
+  if (!src) return;
+  if (fb) fb.style.display = 'none';
+  img.style.display = '';
+  img.onerror = () => helpImgFailed(img, fallbackId);
+  img.src = src + (src.includes('?') ? '&' : '?') + 'v=' + Date.now();
+}
+
+function assetUrl(name) {
+  // Resolve against current page URL — works on :7080 and under HA Ingress
+  try {
+    return new URL(name, window.location.href).href;
+  } catch (_) {
+    return name;
+  }
+}
+
+function openHelpShot() {
+  const t = tr[currLang];
+  const steps = document.getElementById('helpModalSteps');
+  if (steps && Array.isArray(t.helpSteps)) {
+    steps.innerHTML = t.helpSteps.map(s => `<li>${s}</li>`).join('');
+  }
+  document.getElementById('helpModalTitle').textContent = t.helpModalTitle;
+  document.getElementById('helpModalText').textContent = t.helpModalText;
+  document.getElementById('helpCloseBtn').textContent = t.helpClose;
+  const setCap = (id, text) => { const el = document.getElementById(id); if (el && text) el.textContent = text; };
+  setCap('helpCapSchematic', t.helpCapSchematic);
+  setCap('helpCapKeys', t.helpCapKeys);
+  setCap('helpCapLink', t.helpCapLink);
+  setCap('btnOpenHelpPage', t.btnOpenHelpPage);
+  loadHelpLocalImg('helpImgSchematic', 'helpSchematicFallback');
+  loadHelpLocalImg('helpImgKeys', 'helpKeysFallback');
+  loadHelpRemoteImg('helpImgLink', 'helpLinkFallback');
+  document.getElementById('helpModal').classList.add('show');
+}
+
+function closeHelpShot() {
+  document.getElementById('helpModal').classList.remove('show');
+}
+
+async function openLocalHelpAsset() {
+  const candidates = [
+    assetUrl('tuya-help.html'),
+    assetUrl('./tuya-help.html'),
+    assetUrl('tuya-help.svg'),
+    assetUrl('./tuya-help.svg'),
+  ];
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, { method: 'GET', cache: 'no-store' });
+      if (r.ok) {
+        window.open(url, '_blank', 'noopener');
+        return;
+      }
+    } catch (_) {}
+  }
+  // Last resort: open modal with inline schematic
+  openHelpShot();
+}
+
+function closeDps() {
+  document.getElementById('dpsModal').classList.remove('show');
+  modalDeviceId = null;
+}
+
+async function apiJsonAllowError(path, opts = {}) {
+  const clean = String(path || '').replace(/^\/+/, '');
+  const candidates = ['./' + clean, clean, '/' + clean];
+  let lastError = null;
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, opts);
+      const text = await r.text();
+      let data = {};
+      try { data = text ? JSON.parse(text) : {}; } catch (_) { data = { msg: text }; }
+      data._http = r.status;
+      data.ok = data.ok === true;
+      return data;
+    } catch (e) {
+      lastError = e;
+    }
+  }
+  throw lastError || new Error('API unreachable');
+}
+
+async function probeDevice(devId) {
+  const t = tr[currLang];
+  const btn = document.getElementById('probe-' + devId);
+  if (btn) btn.disabled = true;
+  try {
+    const data = await apiJsonAllowError('/api/device/' + encodeURIComponent(devId) + '/probe');
+    if (data.ok) {
+      toast(t.toastProbeOk.replace('{ms}', data.latency_ms ?? '?'));
+      if (btn) {
+        btn.innerHTML = `<span class="probe-ok">${t.probeOk.replace('{ms}', data.latency_ms ?? '?')}</span>`;
+      }
+    } else {
+      toast(t.toastProbeFail + (data.msg || data.result || ''));
+      if (btn) btn.innerHTML = `<span class="probe-bad">${t.probeFail}</span>`;
+    }
+  } catch (e) {
+    toast(t.toastProbeFail + e.message);
+    if (btn) btn.innerHTML = `<span class="probe-bad">${t.probeFail}</span>`;
+  } finally {
+    if (btn) setTimeout(() => { btn.disabled = false; }, 800);
+  }
+}
+
+async function monitorDevice(devId) {
+  const t = tr[currLang];
+  modalDeviceId = devId;
+  document.getElementById('dpsMeta').textContent = 'Monitor…';
+  document.getElementById('dpsNamed').style.display = 'none';
+  document.getElementById('dpsPre').textContent = '…';
+  document.getElementById('dpsModal').classList.add('show');
+  try {
+    const data = await api('/api/device/' + encodeURIComponent(devId) + '/monitor?seconds=8&samples=4');
+    const lines = (data.samples || []).map(s => {
+      const dps = s.dps_named
+        ? Object.entries(s.dps_named).map(([k,v]) => `${v.name||k}=${JSON.stringify(v.value)}`).join(', ')
+        : JSON.stringify(s.dps || {});
+      return `[${s.t}] ${s.ok && !s.error ? 'OK' : 'ERR'} ${s.latency_ms}ms  ${s.error || dps}`;
+    });
+    document.getElementById('dpsMeta').textContent = data?.device
+      ? `${data.device.name || ''} (${data.device.ip || ''}) — ${data.summary || ''}`
+      : (data.summary || '');
+    document.getElementById('dpsPre').textContent = lines.join('\n') + '\n\n' + JSON.stringify(data, null, 2);
+    toast(t.toastMonDone.replace('{summary}', data.summary || ''));
+  } catch (e) {
+    document.getElementById('dpsPre').textContent = String(e.message || e);
+    toast(t.toastProbeFail + e.message);
+  }
+}
+
+function probeFromModal() {
+  if (modalDeviceId) probeDevice(modalDeviceId);
+}
+function monitorFromModal() {
+  if (modalDeviceId) monitorDevice(modalDeviceId);
+}
+
+async function exportIntegration(fmt) {
+  const t = tr[currLang];
+  try {
+    const data = await api('/api/export/integration?format=json&only_key=1');
+    const n = data.count || 0;
+    if (!n) { toast(t.toastExportEmpty); return; }
+    const text = fmt === 'tuya_local' ? data.yaml_tuya_local : data.yaml_localtuya;
+    const blob = new Blob([text], {type:'text/yaml'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fmt === 'tuya_local' ? 'tuya_local_devices.yaml' : 'localtuya_devices.yaml';
+    a.click();
+    toast(t.toastExportOk.replace('{n}', n));
+  } catch (e) {
+    toast(t.toastBackupFail + e.message);
+  }
+}
+
+async function openTuyaLocalPush() {
+  const t = tr[currLang];
+  let ids = Array.from(selectedDeviceIds);
+  if (!ids.length) {
+    ids = allDevices
+      .filter(d => d.localKey && d.localKey.length > 3)
+      .map(deviceIdOf)
+      .filter(Boolean);
+  }
+  if (!ids.length) { toast(t.pushEmpty); return; }
+  try {
+    const data = await api('/api/export/tuya_local_push', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ ids, refresh_ha: true })
+    });
+    pushYamlText = data.yaml_tuya_local || '';
+    const sum = document.getElementById('pushSummary');
+    if (sum) {
+      sum.textContent = (t.pushSummary || '')
+        .replace('{n}', data.count || 0)
+        .replace('{ha}', data.in_ha || 0)
+        .replace('{new}', data.new || 0)
+        .replace('{mm}', data.ip_mismatches || 0);
+    }
+    const list = document.getElementById('pushList');
+    if (list) {
+      list.innerHTML = (data.devices || []).map(r => {
+        const badges = r.in_ha
+          ? `<span class="push-badge in-ha">${t.pushBadgeHa}</span>` +
+            (r.ip_mismatch ? `<span class="push-badge mm">${t.pushBadgeMm}</span>` : '')
+          : `<span class="push-badge new">${t.pushBadgeNew}</span>`;
+        const fixBtn = (r.ip_mismatch && r.entry_id && r.host)
+          ? `<button class="btn btn-success btn-xs" style="margin-top:6px" onclick="fixHaIp('${escapeJs(r.entry_id)}','${escapeJs(r.host)}')">${t.haFixBtn}</button>`
+          : '';
+        return `<div class="push-row">` +
+          `<div class="pr-title">${escapeHtml(r.friendly_name || r.device_id)}${badges}</div>` +
+          `<div class="pr-meta">device_id: ${escapeHtml(r.device_id)}</div>` +
+          `<div class="pr-meta">host: ${escapeHtml(r.host || '—')} · ver ${escapeHtml(r.protocol_version || '')}` +
+          (r.in_ha && r.configured_host ? ` · HA: ${escapeHtml(r.configured_host)}` : '') +
+          `</div>` +
+          `<div class="pr-meta">local_key: ${escapeHtml(r.local_key || '')}</div>` +
+          fixBtn +
+        `</div>`;
+      }).join('') || `<div class="step-help">${t.pushEmpty}</div>`;
+    }
+    const pre = document.getElementById('pushYamlPre');
+    if (pre) pre.textContent = pushYamlText;
+    document.getElementById('pushModal').classList.add('show');
+  } catch (e) {
+    toast((t.toastBackupFail || 'Error: ') + e.message);
+  }
+}
+
+function closeTuyaLocalPush() {
+  document.getElementById('pushModal')?.classList.remove('show');
+}
+
+async function copyPushYaml() {
+  const t = tr[currLang];
+  if (!pushYamlText) return;
+  await copyText(pushYamlText);
+  toast(t.toastPushCopied || t.toastCopied);
+}
+
+function downloadPushYaml() {
+  if (!pushYamlText) return;
+  const blob = new Blob([pushYamlText], {type:'text/yaml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tuya_local_push.yaml';
+  a.click();
+}
+
+function exportJSON() {
+  if (!allDevices.length) { toast(tr[currLang].toastBackupEmpty); return; }
+  const blob = new Blob([JSON.stringify(allDevices, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tuya_devices_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  toast('Eksportowano ' + allDevices.length + ' urządzeń');
+}
+
+function updateBackupMeta(last) {
+  const t = tr[currLang];
+  const el = document.getElementById('backupMeta');
+  if (!el) return;
+  if (!last || !last.at) {
+    el.textContent = t.backupNone;
+    return;
+  }
+  const c = last.count || {};
+  el.textContent = t.backupMeta
+    .replace('{at}', last.at)
+    .replace('{devices}', c.devices ?? '–')
+    .replace('{keys}', c.with_key ?? '–')
+    .replace('{reason}', last.reason || '');
+}
+
+async function refreshBackupList() {
+  const sel = document.getElementById('backupSelect');
+  if (!sel) return;
+  try {
+    const data = await api('/api/exports');
+    const items = data.exports || [];
+    const prev = sel.value;
+    sel.innerHTML = '';
+    if (!items.length) {
+      const opt = document.createElement('option');
+      opt.value = 'latest.json';
+      opt.textContent = 'latest.json';
+      sel.appendChild(opt);
+      return;
+    }
+    items.forEach(it => {
+      const opt = document.createElement('option');
+      opt.value = it.name;
+      const keys = it.count?.with_key ?? '?';
+      const devices = it.count?.devices ?? '?';
+      opt.textContent = `${it.name} · ${it.at || ''} · ${devices}/${keys}`;
+      sel.appendChild(opt);
+    });
+    if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function saveBackup() {
+  const t = tr[currLang];
+  try {
+    const res = await api('/api/export/save', { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+    if (!res.ok) { toast(t.toastBackupEmpty); return; }
+    toast(t.toastBackupSaved);
+    updateBackupMeta(res.export);
+    await refreshBackupList();
+  } catch (e) {
+    toast(t.toastBackupFail + e.message);
+  }
+}
+
+async function downloadBackup() {
+  const t = tr[currLang];
+  const name = document.getElementById('backupSelect')?.value || 'latest.json';
+  try {
+    if (name === 'latest.json' && allDevices.length) {
+      try {
+        await api('/api/export/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}',
+        });
+      } catch (_) {}
+    }
+    const clean = 'api/export/download?name=' + encodeURIComponent(name);
+    const candidates = ['./' + clean, clean, '/' + clean];
+    let blob = null;
+    let lastError = null;
+    for (const url of candidates) {
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        blob = await r.blob();
+        break;
+      } catch (e) {
+        lastError = e;
+      }
+    }
+    if (!blob) throw lastError || new Error('download failed');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name === 'latest.json' ? 'tuya_devices_latest.json' : name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast(t.lblDownloadBackup + ': ' + name);
+    await refreshBackupList();
+  } catch (e) {
+    toast(t.toastBackupFail + e.message);
+  }
+}
+
+async function restoreBackup() {
+  const t = tr[currLang];
+  const name = document.getElementById('backupSelect')?.value || 'latest.json';
+  try {
+    const res = await api('/api/export/restore', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name })
+    });
+    if (!res.ok) { toast(t.toastBackupFail + (res.msg || '')); return; }
+    toast(t.toastBackupRestored.replace('{devices}', res.devices));
+    await tick();
+    await refreshBackupList();
+  } catch (e) {
+    toast(t.toastBackupFail + e.message);
+  }
+}
+
+async function loadSavedCredentials() {
+  try {
+    const c = await api('/api/credentials');
+    if (!c.saved) return;
+    if (c.region) document.getElementById('w-region').value = c.region;
+    if (c.apiKey) document.getElementById('w-key').value = c.apiKey;
+    if (c.apiSecret) document.getElementById('w-secret').value = c.apiSecret;
+    if (c.deviceId && document.getElementById('w-device')) {
+      document.getElementById('w-device').value = c.deviceId;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// Init
+document.getElementById('langSelect').value = currLang;
+document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+document.querySelector('.theme-toggle').textContent = darkMode ? '☀️' : '🌙';
+setAccent(currAccent);
+applyLang();
+const savedQrUser = localStorage.getItem('qr_user_code');
+if (savedQrUser) {
+  const qu = document.getElementById('qr-user');
+  if (qu) qu.value = savedQrUser;
+}
+const qsEl = document.getElementById('qr-scheme');
+if (qsEl) {
+  qsEl.addEventListener('change', () => { qsEl.dataset.userSet = '1'; });
+}
+loadSavedCredentials();
+refreshBackupList();
+tick();
+setInterval(tick, 2000);
+setInterval(refreshBackupList, 15000);
+</script>
+</body>
+</html>
