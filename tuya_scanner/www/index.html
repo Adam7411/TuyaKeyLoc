@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl" data-accent="blue">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TuyaKeyLoc</title>
+<link rel="icon" type="image/png" href="./icon.png">
+<link rel="apple-touch-icon" href="./icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg:     #f0f4f8;
+  --card:   #ffffff;
+  --bdr:    #dde3ec;
+  --bdr2:   #c8d2e0;
+  --blue:   #2563eb;
+  --blue2:  #1d4ed8;
+  --green:  #059669;
+  --green2: #d1fae5;
+  --orange: #d97706;
+  --orange2:#fef3c7;
+  --red:    #dc2626;
+  --red2:   #fee2e2;
+  --purple: #7c3aed;
+  --purple2:#ede9fe;
+  --gray:   #64748b;
+  --gray2:  #94a3b8;
+  --txt:    #0f172a;
+  --txt2:   #374151;
+  --mono:   'JetBrains Mono', monospace;
+  --fs:     17px;
+  --pad:    14px;
+  --accent: #2563eb;
+  --accent2:#1d4ed8;
+  --banner1:#e0f2fe;
+  --banner2:#dbeafe;
+  --banner-bdr:#93c5fd;
+}
+
+[data-accent="blue"]{--accent:#2563eb;--accent2:#1d4ed8;--blue:#2563eb;--blue2:#1d4ed8;--banner1:#e0f2fe;--banner2:#dbeafe;--banner-bdr:#93c5fd}
+[data-accent="teal"]{--accent:#0d9488;--accent2:#0f766e;--blue:#0d9488;--blue2:#0f766e;--banner1:#ccfbf1;--banner2:#99f6e4;--banner-bdr:#5eead4}
+[data-accent="emerald"]{--accent:#059669;--accent2:#047857;--blue:#059669;--blue2:#047857;--banner1:#d1fae5;--banner2:#a7f3d0;--banner-bdr:#6ee7b7}
+[data-accent="amber"]{--accent:#d97706;--accent2:#b45309;--blue:#d97706;--blue2:#b45309;--banner1:#fef3c7;--banner2:#fde68a;--banner-bdr:#fcd34d}
+[data-accent="rose"]{--accent:#e11d48;--accent2:#be123c;--blue:#e11d48;--blue2:#be123c;--banner1:#ffe4e6;--banner2:#fecdd3;--banner-bdr:#fda4af}
+[data-accent="violet"]{--accent:#7c3aed;--accent2:#6d28d9;--blue:#7c3aed;--blue2:#6d28d9;--banner1:#ede9fe;--banner2:#ddd6fe;--banner-bdr:#c4b5fd}
+[data-accent="slate"]{--accent:#475569;--accent2:#334155;--blue:#475569;--blue2:#334155;--banner1:#e2e8f0;--banner2:#cbd5e1;--banner-bdr:#94a3b8}
+
+[data-theme="dark"] {
+  --bg:     #0f172a;
+  --card:   #1e293b;
+  --bdr:   #334155;
+  --bdr2:  #475569;
+  --gray:   #94a3b8;
+  --gray2:  #64748b;
+  --txt:    #f1f5f9;
+  --txt2:   #cbd5e1;
+  --green2: #064e3b;
+  --orange2:#451a03;
+  --purple2:#2e1065;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;font-size:var(--fs);line-height:1.6}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.top-left{display:flex;align-items:center;gap:10px}
+.lang-select,.theme-toggle{padding:7px 12px;border-radius:8px;font-size:.9rem;font-weight:600;border:1.5px solid var(--bdr2);background:var(--bg);color:var(--txt);cursor:pointer}
+.credits{font-size:.85rem;color:var(--gray)}
+.credits a{color:var(--blue);text-decoration:none}
+
+.wrap{max-width:none;width:100%;margin:0;padding:16px 18px 40px}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 14px rgba(13,148,136,.35);background:linear-gradient(135deg,#0d9488,#22d3ee)}
+.logo img{width:100%;height:100%;object-fit:cover;display:block}
+.header-title{font-size:1.45rem;font-weight:800;color:var(--txt);letter-spacing:-.03em}
+.header-sub{font-size:.95rem;color:var(--gray);margin-top:2px}
+.header-badge{background:var(--accent);color:#fff;border-radius:6px;padding:5px 12px;font-size:.8rem;font-weight:600}
+
+.info-banner{background:linear-gradient(135deg,var(--banner1),var(--banner2));border:1px solid var(--banner-bdr);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:.95rem;line-height:1.[...]
